@@ -40,10 +40,12 @@ function init() {
             }
         });
 
+        console.log("Subscribing now");
         socket.emit("subscribe", {
             url: window.location.href,
             sender: div_nick.text()
         });
+        console.log("Subscribed");
 
         socket.on("newmesssage", function (data) {
             console.log(data);
