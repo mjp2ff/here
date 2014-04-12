@@ -4,6 +4,7 @@ function init() {
     var div_main = $(document.createElement("div"));
     div_main.attr("id", "glocale_main");
     div_main.text(window.location.href);
+//    var div_
     $("body").append(div_main);
 }
 
