@@ -1,5 +1,6 @@
--- Sample code for creating our table. Actaully run through psql
+-- Sample code for table stuff. Actually run through psql
 
+-- Create table
 CREATE TABLE message (
     id serial PRIMARY KEY,
     time_sent timestamp DEFAULT current_timestamp,
@@ -7,3 +8,6 @@ CREATE TABLE message (
     url text NOT NULL,
     body text NOT NULL
 );
+
+-- Assertion to only keep 50 messages per URL
+-- TODO: this
