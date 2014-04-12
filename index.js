@@ -47,7 +47,7 @@ app.get('/getmessages', function(req, res) {
                 return console.error('error getting messages from database', err);
             }
             console.log('Successfully got messages!');
-            res.send(200, result);
+            res.send(200, result.rows);
         });
     });
 });
