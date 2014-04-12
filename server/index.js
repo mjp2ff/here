@@ -5,6 +5,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
 var KEEP_TIME_SECONDS = 15*60;   // How many seconds to store messages for
+var GRAFFITI_KEEP_TIME_SECONDS = 60*24*60;  // Same, for graffiti
 
 io.sockets.on('connection', function (socket) {
     // User joined page.
@@ -23,11 +24,12 @@ io.sockets.on('connection', function (socket) {
             if(err) {
                 return socket.emit('error', 'DB connection error');
             }
-            client.query("SELECT * FROM message WHERE url=$1", [chatURL], function(err, result) {
+            client.query("SELECT * FROM graffiti WHERE url=$1", [chatURL], function(err, result) {
                 if(err) {
-                    return socket.emit('error', 'Messages not found');
+                    return socket.emit('error', 'Graffiti not found');
                 }
-                socket.emit('messages', result.rows);
+
+                socket.emit('graffiti', result.rows);
             });
         });
     });
@@ -50,7 +52,7 @@ io.sockets.on('connection', function (socket) {
 
         console.log("Server received message:", data, "from client");
         socket.broadcast.to(chatURL).emit('newmessage', data);
-        console.log("Now broadcasting message:", data, "to URL group: ", chatURL);
+        console.log("Now broadcasting message:", data, "to URL group:", chatURL);
 
         pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             if(err) {
@@ -68,6 +70,30 @@ io.sockets.on('connection', function (socket) {
         });
         socket.emit('numusers', io.sockets.clients(chatURL).length);
     });
+
+    socket.on('sendgraffiti', function(data) {
+        var chatURL = data.url.split('/')[2];
+
+        console.log("Server received graffiti:", data, "from client");
+        socket.broadcast.to(chatURL).emit('newgraffiti', data);
+        console.log("Now broadcasting graffiti:", data, "to URL group:", chatURL);
+
+        pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+            if(err) {
+                return console.error('error fetching client from pool', err);
+            }
+
+            client.query("INSERT INTO graffiti(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, data.body], function(err, result) {
+                if(err) {
+                    return console.error('error inserting graffiti into database', err);
+                }
+                console.log('Successfully inserted new graffiti!');
+            });
+
+            deleteOldMessages(client, chatURL);
+        });
+        socket.emit('numusers', io.sockets.clients(chatURL).length);
+    });
 });
 
 var port = Number(process.env.PORT || 5000);
@@ -76,16 +102,17 @@ server.listen(port, function() {
 });
 
 function deleteOldMessages(client, url) {
-    client.query("SELECT * FROM message WHERE url=$1 ORDER BY time_sent ASC", [url], function(err, result) {
+    client.query("DELETE FROM message WHERE url=$1 AND time_sent<$2", [url, Math.round(+new Date()/1000) - KEEP_TIME_SECONDS], function(err, result) {
         if(err) {
-            return console.error('error getting messages from database', err);
+            return console.error('error deleting old messages from database', err);
         }
-        var numRows = result.rows.length;
-        client.query("DELETE FROM message WHERE url=$1 AND time_sent<$2", [url, Math.round(+new Date()/1000) - KEEP_TIME_SECONDS], function(err, result) {
-            if(err) {
-                return console.error('error deleting old messages from database', err);
-            }
-            console.log('Succesfully deleted old rows!');
-        });
+        console.log('Succesfully deleted old rows!');
+    });
+
+    client.query("DELETE FROM graffiti WHERE url=$1 AND time_sent<$2", [url, Math.round(+new Date()/1000) - GRAFFITI_KEEP_TIME_SECONDS], function(err, result) {
+        if(err) {
+            return console.error('error deleting old graffiti from database', err);
+        }
+        console.log('Succesfully deleted old graffiti rows!');
     });
 }

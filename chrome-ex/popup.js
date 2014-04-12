@@ -41,13 +41,30 @@ function init() {
             }
         });
 
+        // TODO: Change to real condition for graffiti
+        if (false) {
+            socket.emit("sendgraffiti", {
+                url: window.location.href,
+                sender: div_nick.text(),
+                body: input_msg.html()
+            });
+            // TODO: Right-adjust your own messages.
+            div_messages.append("<div>" + div_nick.text() + ": " + input_msg.html() + "</div>");
+            input_msg.html("");
+        }
+
         socket.emit("subscribe", {
             url: window.location.href,
             sender: div_nick.text()
         });
 
         socket.on("newmessage", function (data) {
-            console.log("Client sending data", data);
+            console.log("Client sending message w/ data", data);
+            div_messages.append("<div>" + data.sender + ": " + data.body + "</div>");
+        });
+
+        socket.on("newgraffiti", function (data) {
+            console.log("Client sending graffiti w/ data", data);
             div_messages.append("<div>" + data.sender + ": " + data.body + "</div>");
         });
 
