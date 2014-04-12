@@ -11,12 +11,14 @@
     "url": "https://github.com/mjp2ff/here.git"
   },
   "author": "rbk2kb, mjp2ff, sunian",
-  "license": "MIT",
+  "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/mjp2ff/here/issues"
   },
   "homepage": "https://github.com/mjp2ff/here",
   "dependencies": {
-    "pg": "~3.0.1"
-  }
+    "pg": "~3.0.1",
+    "express": "~4.0.0"
+  },
+  "devDependencies": {}
 }
