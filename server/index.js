@@ -2,6 +2,8 @@ var pg = require('pg');
 var express = require('express');
 var app = express();
 
+var MAX_ROWS = 3;
+
 app.configure(function() {
     app.use(express.bodyParser());
     app.use(app.router);
@@ -64,8 +66,8 @@ function deleteOldMessages(client, url, res) {
             return console.error('error getting messages from database', err);
         }
         var numRows = result.rows.length;
-        if (numRows >= 50) {
-            client.query("DELETE FROM message WHERE url=$1 AND time_sent<$2", [url, result.rows[numRows-3].time_sent], function(err, result) {
+        if (numRows >= MAX_ROWS) {
+            client.query("DELETE FROM message WHERE url=$1 AND time_sent<$2", [url, result.rows[numRows-MAX_ROWS].time_sent], function(err, result) {
                 if(err) {
                     res.send(500);
                     return console.error('error deleting old messages from database', err);
