@@ -84,13 +84,11 @@ function deleteOldMessages(client, url) {
             return console.error('error getting messages from database', err);
         }
         var numRows = result.rows.length;
-        if (numRows > MAX_ROWS) {
-            client.query("DELETE FROM message WHERE url=$1 AND time_sent<$2", [url, Math.round(+new Date()/1000) - KEEP_TIME_SECONDS], function(err, result) {
-                if(err) {
-                    return console.error('error deleting old messages from database', err);
-                }
-                console.log('Succesfully deleted old rows!');
-            });
-        }
+        client.query("DELETE FROM message WHERE url=$1 AND time_sent<$2", [url, Math.round(+new Date()/1000) - KEEP_TIME_SECONDS], function(err, result) {
+            if(err) {
+                return console.error('error deleting old messages from database', err);
+            }
+            console.log('Succesfully deleted old rows!');
+        });
     });
 }
