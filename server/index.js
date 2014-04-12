@@ -18,10 +18,10 @@ io.sockets.on('connection', function (socket) {
         socket.join(data.url);
         console.log("Subscribed ", data.sender + " to ", data.url);
 
-        console.log("URL is", data.url);
-        // var chatURL = '/' + url.split('/')[0].replace('.', '_');
-
-        socket.broadcast.to(data.url).emit('userjoined', data.sender);
+        socket.broadcast.to(data.url).emit('userjoined', {
+            user: data.sender, 
+            num_left: io.sockets.clients(data.url).length
+        });
 
         pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             if(err) {
@@ -39,7 +39,10 @@ io.sockets.on('connection', function (socket) {
     // User left page.
     socket.on('unsubscribe', function(data) {
         console.log("Unsubscribed ", data.sender, " from ", data.url);
-        socket.broadcast.to(data.url).emit('userleft', data.sender);
+        socket.broadcast.to(data.url).emit('userleft', {
+            user: data.sender, 
+            num_left: io.sockets.clients(data.url).length
+        });
         socket.leave(data.url);
     });
 
@@ -66,6 +69,7 @@ io.sockets.on('connection', function (socket) {
 
             deleteOldMessages(client, data.url);
         });
+        socket.emit('numusers', io.sockets.clients(data.url).length);
     });
 });
 
