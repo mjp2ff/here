@@ -66,7 +66,7 @@ var MAX_ROWS = 3;
 io.sockets.on('connection', function (socket) {
     socket.on('subscribe', function(data) {
         socket.join(data.url);
-        console.log("Subscribed " + data.sender + " to " + data.url);
+        console.log("Subscribed ", data.sender + " to ", data.url);
 
         socket.broadcast.to(data.url).emit('userjoined', data.sender);
 
@@ -84,13 +84,13 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('unsubscribe', function(data) {
-        console.log("Unsubscribed " + data.sender + " from " + data.url);
+        console.log("Unsubscribed ", data.sender, " from ", data.url);
         socket.broadcast.to(data.url).emit('userleft', data.sender);
         socket.leave(data.url);
     });
 
     socket.on('sendmessage', function(data) {
-        console.log("Got message " + data);
+        console.log("Got message ", data);
         socket.broadcast.to(data.url).emit('newmessage', data);
         var sender = data.sender;
         var url = data.url;
@@ -116,7 +116,7 @@ io.sockets.on('connection', function (socket) {
 var port = Number(process.env.PORT || 5000);
 // app.listen(port, function() {
 server.listen(port, function() {
-  console.log("Listening on " + port);
+  console.log("Listening on ", port);
 });
 
 function deleteOldMessages(client, url) {
