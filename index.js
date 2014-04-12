@@ -15,7 +15,6 @@ app.get('/', function(req, res) {
 });
 
 app.post('/newmessage', function(req, res) {
-    console.log(req);
     sender = req.body.sender;
     url = req.body.url;
     body = req.body.body;
