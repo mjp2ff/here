@@ -1,4 +1,5 @@
 var pg = require('pg');
+var logfmt = require("logfmt");
 var express = require('express');
 var app = express();
 pg.connect(process.env.DATABASE_URL, function(err, client, done) {
