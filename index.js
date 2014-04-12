@@ -1,9 +1,6 @@
 var pg = require('pg');
-// var logfmt = require("logfmt");
 var express = require('express');
 var app = express();
-
-// app.use(logfmt.requestLogger());
 
 app.configure(function() {
     app.use(express.bodyParser());
