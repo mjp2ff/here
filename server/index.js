@@ -1,7 +1,7 @@
 var pg = require('pg');
 var express = require('express');
 var app = express();
-var io = require('socket.io').listen(80);
+var io = require('socket.io').listen(843);
 
 var sockets = {};
 
@@ -71,17 +71,17 @@ io.sockets.on('connection', function (socket) {
 
         var chatURL = '/' + url.split('/')[0].replace('.', '_');
 
-        pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-            if(err) {
-                return socket.emit('error', 'DB connection error');
-            }
-            client.query("SELECT * FROM message WHERE url=$1", [chatURL], function(err, result) {
-                if(err) {
-                    return socket.emit('error', 'Messages not found');
-                }
-                socket.emit('messages', result.rows);
-            });
-        });
+        // pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+        //     if(err) {
+        //         return socket.emit('error', 'DB connection error');
+        //     }
+        //     client.query("SELECT * FROM message WHERE url=$1", [chatURL], function(err, result) {
+        //         if(err) {
+        //             return socket.emit('error', 'Messages not found');
+        //         }
+        //         socket.emit('messages', result.rows);
+        //     });
+        // });
     });
 
     socket.on('unsubscribe', function(data) {
@@ -99,20 +99,20 @@ io.sockets.on('connection', function (socket) {
 
         var chatURL = '/' + url.split('/')[0].replace('.', '_');
 
-        pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-            if(err) {
-                return console.error('error fetching client from pool', err);
-            }
+        // pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+        //     if(err) {
+        //         return console.error('error fetching client from pool', err);
+        //     }
 
-            client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [sender, chatURL, body], function(err, result) {
-                if(err) {
-                    return console.error('error inserting message into database', err);
-                }
-                console.log('Successfully inserted new message!');
-            });
+        //     client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [sender, chatURL, body], function(err, result) {
+        //         if(err) {
+        //             return console.error('error inserting message into database', err);
+        //         }
+        //         console.log('Successfully inserted new message!');
+        //     });
 
-            deleteOldMessages(client, chatURL);
-        });
+        //     deleteOldMessages(client, chatURL);
+        // });
     });
 });
 

@@ -1,7 +1,7 @@
 $(init);
 console.log(io);
 //var socket = io.connect("http://glocale.herokuapp.com");
-var socket = io.connect("http://localhost:5000");
+var socket = io.connect("http://localhost:843");
 
 var div_main, div_messages, div_header, input_msg, div_nick;
 function init() {
