@@ -44,8 +44,8 @@ function init() {
             sender: div_nick.text()
         });
 
-        socket.on("newmesssage", function (data) {
-            console.log(data);
+        socket.on("newmessage", function (data) {
+            console.log("Client sending data", data);
             div_messages.append("<div>" + data + "</div>");
         });
 
