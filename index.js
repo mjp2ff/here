@@ -20,13 +20,16 @@ app.post('/newmessage', function(req, res) {
     body = req.body.body;
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
         if(err) {
+            res.send(500);
             return console.error('error fetching client from pool', err);
         }
         client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [sender, url, body], function(err, result) {
             if(err) {
+                res.send(500);
                 return console.error('error inserting message into database', err);
             }
             console.log('Successfully inserted new message!');
+            res.send(200);
         });
     });
 });
