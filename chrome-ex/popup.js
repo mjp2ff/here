@@ -35,6 +35,8 @@ function init() {
                     sender: div_nick.text(),
                     body: input_msg.html()
                 });
+                // TODO: Right-adjust your own messages.
+                div_messages.append("<div>" + div_nick.text() + ": " + input_msg.html() + "</div>");
                 input_msg.html("");
             }
         });
@@ -46,7 +48,7 @@ function init() {
 
         socket.on("newmessage", function (data) {
             console.log("Client sending data", data);
-            div_messages.append("<div>" + data + "</div>");
+            div_messages.append("<div>" + data.sender + ": " + data.body + "</div>");
         });
 
         update();
