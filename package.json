@@ -18,7 +18,8 @@
   "homepage": "https://github.com/mjp2ff/here",
   "dependencies": {
     "pg": "~3.0.1",
-    "express": "~3.5.0"
+    "express": "~3.5.0",
+    "socket.io": "~0.9.16"
   },
   "devDependencies": {}
 }

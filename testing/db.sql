@@ -1,6 +1,6 @@
 -- Sample code for table stuff. Actually run through psql
 
--- Create table
+-- Create message table
 CREATE TABLE message (
     id serial PRIMARY KEY,
     time_sent timestamp DEFAULT current_timestamp,
