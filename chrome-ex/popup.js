@@ -1,26 +1,41 @@
 $(init);
-//var bkg = chrome.extension.getBackgroundPage();
+
+var div_main, div_messages, div_header, input_msg;
 function init() {
-    var div_main = $(document.createElement("div"));
-    div_main.attr("id", "glocale_main");
-    div_main.text(window.location.href);
-//    var div_
-    $("body").append(div_main);
+    $.get(chrome.extension.getURL("popup.html"), function (data){
+        $("body").append(data);
+        div_main = $("div#glocale_main");
+        div_messages = $("div#glocale_messages");
+        input_msg = $("span#glocale_input");
+        div_header = $("div#glocale_header");
+        div_main.bind("mouseenter", function () {
+            input_msg.focus();
+        });
+
+//        inputSelection = document.createRange();
+//        inputSelection.setStart(input_msg, 0);
+//        inputSelection.setEnd(input_msg, 0);
+
+        input_msg.bind("keyup", updateSelection);
+        input_msg.bind("mouseup", updateSelection);
+        input_msg.bind("focus", function () {
+            if (inputSelection == null) return;
+//            console.log(inputSelection);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(inputSelection)
+        })
+
+        update();
+    });
 }
 
-function urlChanged() {
-    console.log(window.location.href);
-//    console.log(chrome.tabs);
-//    chrome.tabs.query({ lastFocusedWindow:true}, function (arrayOfTabs) {
+function update(){
+    div_header.text(window.location.href);
 
-        // since only one tab should be active and in the current window at once
-        // the return variable should only have one entry
-//        var activeTab = arrayOfTabs[0];
-//        console.log(arrayOfTabs);
-//        var activeTabId = arrayOfTabs[0].id; // or do whatever you need
-//        chrome.tabs.get(activeTabId, function (tab){
-//            console.log(tab);
-//        });
-//    });
-//    $("div#main").text("tab");
 }
+var inputSelection;
+function updateSelection() {
+//    console.log(input_msg.is(":focus"));
+    inputSelection = window.getSelection().getRangeAt(0);
+}
+// var elt=evt.target; elt.innerText=elt.innerText.replace(/\n/g,' ');

@@ -25,5 +25,5 @@
         "http://*/*", "https://*/*",
         "http://glocale.herokuapp.com/"
     ],
-    "web_accessible_resources": ["jquery-latest.min.js", "popup.js" ]
+    "web_accessible_resources": ["jquery-latest.min.js", "popup.js", "popup.html" ]
 }
