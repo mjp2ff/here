@@ -10,7 +10,7 @@ io.configure(function() {
     io.set("polling duration", 10);
 });
 
-var MAX_ROWS = 3;   // How many messages to keep
+var KEEP_TIME_SECONDS = 15*60;   // How many seconds to store messages for
 
 io.sockets.on('connection', function (socket) {
     // User joined page.
@@ -18,19 +18,22 @@ io.sockets.on('connection', function (socket) {
         socket.join(data.url);
         console.log("Subscribed ", data.sender + " to ", data.url);
 
+        console.log("URL is", data.url);
+        // var chatURL = '/' + url.split('/')[0].replace('.', '_');
+
         socket.broadcast.to(data.url).emit('userjoined', data.sender);
 
-        // pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-        //     if(err) {
-        //         return socket.emit('error', 'DB connection error');
-        //     }
-        //     client.query("SELECT * FROM message WHERE url=$1", [data.url], function(err, result) {
-        //         if(err) {
-        //             return socket.emit('error', 'Messages not found');
-        //         }
-        //         socket.emit('messages', result.rows);
-        //     });
-        // });
+        pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+            if(err) {
+                return socket.emit('error', 'DB connection error');
+            }
+            client.query("SELECT * FROM message WHERE url=$1", [data.url], function(err, result) {
+                if(err) {
+                    return socket.emit('error', 'Messages not found');
+                }
+                socket.emit('messages', result.rows);
+            });
+        });
     });
 
     // User left page.
@@ -49,20 +52,20 @@ io.sockets.on('connection', function (socket) {
         var url = data.url;
         var body = data.body;
 
-        // pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-        //     if(err) {
-        //         return console.error('error fetching client from pool', err);
-        //     }
+        pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+            if(err) {
+                return console.error('error fetching client from pool', err);
+            }
 
-        //     client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [sender, data.url, body], function(err, result) {
-        //         if(err) {
-        //             return console.error('error inserting message into database', err);
-        //         }
-        //         console.log('Successfully inserted new message!');
-        //     });
+            client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [sender, data.url, body], function(err, result) {
+                if(err) {
+                    return console.error('error inserting message into database', err);
+                }
+                console.log('Successfully inserted new message!');
+            });
 
-        //     deleteOldMessages(client, data.url);
-        // });
+            deleteOldMessages(client, data.url);
+        });
     });
 });
 
@@ -78,7 +81,7 @@ function deleteOldMessages(client, url) {
         }
         var numRows = result.rows.length;
         if (numRows > MAX_ROWS) {
-            client.query("DELETE FROM message WHERE url=$1 AND time_sent<$2", [url, result.rows[numRows-MAX_ROWS].time_sent], function(err, result) {
+            client.query("DELETE FROM message WHERE url=$1 AND time_sent<$2", [url, Math.round(+new Date()/1000) - KEEP_TIME_SECONDS], function(err, result) {
                 if(err) {
                     return console.error('error deleting old messages from database', err);
                 }
