@@ -62,48 +62,57 @@ app.get('/getmessages', function(req, res) {
     });
 });
 
-app.post('/updatepresence', function(req, res) {
-    var url = req.body.url;
-    var sender = req.body.sender;
+io.sockets.on('connection', function (socket) {
+    socket.on('subscribe', function(data) {
+        socket.join(data.url);
+        console.log("Subscribed " + data.sender + " to " + data.url);
 
-    var chatURL = '/' + url.split('/')[0].replace('.', '_');
+        socket.broadcast.to(data.url).emit('userjoined', data.sender);
 
-    if (!sockets[chatURL]) {
-        var chat = io
-            .of(chatURL)
-            .on('connection', function(socket) {
-                chat.emit('join', {
-                    sender: sender
-                });
+        var chatURL = '/' + url.split('/')[0].replace('.', '_');
 
-                pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-                    if(err) {
-                        return socket.emit('error', 'DB connection error');
-                    }
-                    client.query("SELECT * FROM message WHERE url=$1", [chatURL], function(err, result) {
-                        if(err) {
-                            return socket.emit('error', 'Messages not found');
-                        }
-                        socket.emit('messages', result.rows);
-                    });
-                });
+        pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+            if(err) {
+                return socket.emit('error', 'DB connection error');
+            }
+            client.query("SELECT * FROM message WHERE url=$1", [chatURL], function(err, result) {
+                if(err) {
+                    return socket.emit('error', 'Messages not found');
+                }
+                socket.emit('messages', result.rows);
             });
-        sockets[chatURL] = chat;
-    }
+        });
+    });
 
-    res.send(200, { url: chatURL });
-});
+    socket.on('unsubscribe', function(data) {
+        console.log("Unsubscribed " + data.sender + " from " + data.url);
+        socket.broadcast.to(data.url).emit('userleft', data.sender);
+        socket.leave(data.url);
+    });
 
-// used resources from http://www.danielbaulig.de/socket-ioexpress/
-io.sockets.on('connection', function(socket) {
-    onlineUsers[socket.handshake.sessionID] = socket.handshake.session;
-    online = Object.keys(onlineUsers).length;
-    socket.broadcast.emit('online', online);
+    socket.on('sendmessage', function(data) {
+        console.log("Got message " + data);
+        socket.broadcast.to(data.url).emit('newmessage', data);
+        var sender = data.sender;
+        var url = data.url;
+        var body = data.body;
 
-    socket.on('disconnect', function() {
-        delete onlineUsers[socket.handshake.sessionID];
-        online--;
-        socket.broadcast.emit('online', online);
+        var chatURL = '/' + url.split('/')[0].replace('.', '_');
+
+        pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+            if(err) {
+                return console.error('error fetching client from pool', err);
+            }
+
+            client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [sender, chatURL, body], function(err, result) {
+                if(err) {
+                    return console.error('error inserting message into database', err);
+                }
+                console.log('Successfully inserted new message!');
+            });
+
+            deleteOldMessages(client, chatURL);
+        });
     });
 });
 
@@ -112,17 +121,15 @@ app.listen(port, function() {
   console.log("Listening on " + port);
 });
 
-function deleteOldMessages(client, url, res) {
+function deleteOldMessages(client, url) {
     client.query("SELECT * FROM message WHERE url=$1 ORDER BY time_sent ASC", [url], function(err, result) {
         if(err) {
-            res.send(500);
             return console.error('error getting messages from database', err);
         }
         var numRows = result.rows.length;
         if (numRows > MAX_ROWS) {
             client.query("DELETE FROM message WHERE url=$1 AND time_sent<$2", [url, result.rows[numRows-MAX_ROWS].time_sent], function(err, result) {
                 if(err) {
-                    res.send(500);
                     return console.error('error deleting old messages from database', err);
                 }
                 console.log('Succesfully deleted old rows!');
