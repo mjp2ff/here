@@ -1,26 +1,15 @@
-<!doctype html>
-<html>
-  <head>
-    <title>here</title>
-    <style>
-      body {
-        min-width: 357px;
-        overflow-x: hidden;
-      }
+<div id="glocale_main">
+    <div id="glocale_header"></div>
+    <div id="glocale_messages">
+        guest0: line1
+        <br>
+        guest1: line2
+    </div>
+    <div id="glocale_input_container">
+        <div contenteditable="true" id="glocale_input_name">guest7</div>
+        <!--<input value="guest7">-->
+        <span>></span>
+        <span contenteditable="true" id="glocale_input"></span>
+    </div>
 
-    </style>
-
-    <!--
-      - JavaScript and HTML must be in separate files: see our Content Security
-      - Policy documentation[1] for details and explanation.
-      -
-      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
-     -->
-    <script src="jquery-latest.min.js"></script>
-    <script src="background.js"></script>
-  </head>
-  <body>
-  <div id="main"></div>
-  </body>
-</html>
-
+</div>

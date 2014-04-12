@@ -1,13 +1,48 @@
 div#glocale_main {
-    background-color: gray;
+    color: darkgreen;
+    background-color: black;
     width: 350px;
-    height: 42%;
+    height: 90%;
+    max-height: 500px;
     position: fixed;
+    display: table;
     right: 2px;
     bottom: 2px;
+    padding: 8px;
+    margin-right: 8px;
     z-index: 9999;
     opacity: 0.2;
+    border-radius: 8px 8px 0 0;
+    text-align: left;
 }
 div#glocale_main:hover {
     opacity: 1.0;
+}
+
+div#glocale_main div {
+
+}
+
+div#glocale_messages {
+    display: table-row;
+    background-color: black;
+    width: 350px;
+    height: 100%;
+    /*max-height: 400px;*/
+}
+
+div#glocale_input_container {
+    width: 350px;
+    color: wheat;
+}
+div#glocale_input_container * {
+    vertical-align: top;
+    display: inline-block;
+}
+span#glocale_input {
+
+    min-width: 100px;
+    max-width: 350px;
+    max-height: 200px;
+    /*overflow-y: scroll;*/
 }
