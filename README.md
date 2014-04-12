@@ -2,6 +2,10 @@
 
 This is our project for hack.UVA 2014! We're turning your browser into a vehicle, and every website you visit into a place. When you visit a website, you'll automatically join a chat with everybody else using the app visiting that website.
 
+## Installing
+
+See package.json for a list of requirements/dependencies. Additionally, you'll need the 'requests' library in Python to run our testing scripts.
+
 ## TODO
 
 * Set up Javascript sample client.
