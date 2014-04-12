@@ -4,66 +4,16 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
+// TODO: Check if we need this or not.
 io.configure(function() {
     io.set("transports", ["xhr-polling"]);
     io.set("polling duration", 10);
 });
 
-var MAX_ROWS = 3;
-
-// app.configure(function() {
-//     app.use(express.bodyParser());
-//     app.use(app.router);
-// });
-
-// app.get('/', function(req, res) {
-//   res.send('Hello Worlds!');
-// });
-
-// app.post('/newmessage', function(req, res) {
-//     var sender = req.body.sender;
-//     var url = req.body.url;
-//     var body = req.body.body;
-
-//     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-//         if(err) {
-//             res.send(500);
-//             return console.error('error fetching client from pool', err);
-//         }
-
-//         client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [sender, url, body], function(err, result) {
-//             if(err) {
-//                 res.send(500);
-//                 return console.error('error inserting message into database', err);
-//             }
-//             console.log('Successfully inserted new message!');
-//             res.send(200);
-//         });
-
-//         deleteOldMessages(client, url, res);
-//     });
-// });
-
-// app.get('/getmessages', function(req, res) {
-//     var url = req.body.url;
-
-//     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-//         if(err) {
-//             res.send(500);
-//             return console.error('error fetching client from pool', err);
-//         }
-//         client.query("SELECT * FROM message WHERE url=$1", [url], function(err, result) {
-//             if(err) {
-//                 res.send(500);
-//                 return console.error('error getting messages from database', err);
-//             }
-//             console.log('Successfully got messages!');
-//             res.send(200, result.rows);
-//         });
-//     });
-// });
+var MAX_ROWS = 3;   // How many messages to keep
 
 io.sockets.on('connection', function (socket) {
+    // User joined page.
     socket.on('subscribe', function(data) {
         socket.join(data.url);
         console.log("Subscribed ", data.sender + " to ", data.url);
@@ -83,12 +33,14 @@ io.sockets.on('connection', function (socket) {
         // });
     });
 
+    // User left page.
     socket.on('unsubscribe', function(data) {
         console.log("Unsubscribed ", data.sender, " from ", data.url);
         socket.broadcast.to(data.url).emit('userleft', data.sender);
         socket.leave(data.url);
     });
 
+    // Someone sent a message!
     socket.on('sendmessage', function(data) {
         console.log("Server received message:", data, "from client");
         socket.broadcast.to(data.url).emit('newmessage', data);
@@ -115,7 +67,6 @@ io.sockets.on('connection', function (socket) {
 });
 
 var port = Number(process.env.PORT || 5000);
-// app.listen(port, function() {
 server.listen(port, function() {
   console.log("Listening on ", port);
 });
