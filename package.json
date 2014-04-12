@@ -20,7 +20,6 @@
     "pg": "~3.0.1",
     "express": "~3.5.0",
     "logfmt": "~1.1.2",
-    "json-middleware": "~1.0.2"
   },
   "devDependencies": {}
 }
