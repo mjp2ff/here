@@ -34,6 +34,24 @@ app.post('/newmessage', function(req, res) {
     });
 });
 
+app.get('/getmessages', function(req, res) {
+    url = req.body.url;
+    pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+        if(err) {
+            res.send(500);
+            return console.error('error fetching client from pool', err);
+        }
+        client.query("SELECT * FROM message WHERE url=$1", [url], function(err, result) {
+            if(err) {
+                res.send(500);
+                return console.error('error getting messages from database', err);
+            }
+            console.log('Successfully got messages!');
+            res.send(200, result);
+        });
+    });
+});
+
 var port = Number(process.env.PORT || 5000);
 app.listen(port, function() {
   console.log("Listening on " + port);
