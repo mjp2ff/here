@@ -59,38 +59,25 @@ io.sockets.on('connection', function (socket) {
                 return console.error('error fetching client from pool', err);
             }
 
-            client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, data.body], function(err, result) {
-                if(err) {
-                    return console.error('error inserting message into database', err);
-                }
-                console.log('Successfully inserted new message!');
-            });
+            var isGraffiti = (data.body.indexOf(":leave ") == 0);
 
-            deleteOldMessages(client, chatURL);
-        });
-        socket.emit('numusers', io.sockets.clients(chatURL).length);
-    });
-
-    socket.on('sendgraffiti', function(data) {
-        var chatURL = data.url.split('/')[2];
-
-        console.log("Server received graffiti:", data, "from client");
-        socket.broadcast.to(chatURL).emit('newgraffiti', data);
-        console.log("Now broadcasting graffiti:", data, "to URL group:", chatURL);
-
-        pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-            if(err) {
-                return console.error('error fetching client from pool', err);
+            if (isGraffiti) {
+                client.query("INSERT INTO graffiti(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, data.body], function(err, result) {
+                    if(err) {
+                        return console.error('error inserting graffiti into database', err);
+                    }
+                    console.log('Successfully inserted new graffiti!');
+                });
+            } else {
+                client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, data.body], function(err, result) {
+                    if(err) {
+                        return console.error('error inserting message into database', err);
+                    }
+                    console.log('Successfully inserted new message!');
+                });
             }
 
-            client.query("INSERT INTO graffiti(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, data.body], function(err, result) {
-                if(err) {
-                    return console.error('error inserting graffiti into database', err);
-                }
-                console.log('Successfully inserted new graffiti!');
-            });
-
-            deleteOldMessages(client, chatURL);
+            deleteOldMessages(client, chatURL, data.sender);
         });
         socket.emit('numusers', io.sockets.clients(chatURL).length);
     });
@@ -101,7 +88,7 @@ server.listen(port, function() {
   console.log("Listening on ", port);
 });
 
-function deleteOldMessages(client, url) {
+function deleteOldMessages(client, url, sender) {
     client.query("DELETE FROM message WHERE url=$1 AND time_sent<$2", [url, Math.round(+new Date()/1000) - KEEP_TIME_SECONDS], function(err, result) {
         if(err) {
             return console.error('error deleting old messages from database', err);
@@ -115,4 +102,7 @@ function deleteOldMessages(client, url) {
         }
         console.log('Succesfully deleted old graffiti rows!');
     });
+
+    client.query("DELETE FROM graffiti WHERE url=$1 AND sender=$2 AND time_sent<
+                    (SELECT time_sent FROM graffiti WHERE url=$1 AND sender=$2 ORDER BY time_sent DESC LIMIT 1)", [url, sender])
 }

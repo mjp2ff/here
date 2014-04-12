@@ -41,18 +41,6 @@ function init() {
             }
         });
 
-        // TODO: Change to real condition for graffiti
-        if (false) {
-            socket.emit("sendgraffiti", {
-                url: window.location.href,
-                sender: div_nick.text(),
-                body: input_msg.html()
-            });
-            // TODO: Right-adjust your own messages.
-            div_messages.append("<div>" + div_nick.text() + ": " + input_msg.html() + "</div>");
-            input_msg.html("");
-        }
-
         socket.emit("subscribe", {
             url: window.location.href,
             sender: div_nick.text()

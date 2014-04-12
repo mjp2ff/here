@@ -17,3 +17,4 @@ CREATE TABLE graffiti (
     url text NOT NULL,
     body text NOT NULL
 );
+
