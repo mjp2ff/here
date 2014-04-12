@@ -25,15 +25,13 @@ var MAX_ROWS = 3;
 //     var url = req.body.url;
 //     var body = req.body.body;
 
-//     var chatURL = '/' + url.split('/')[0].replace('.', '_');
-
 //     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 //         if(err) {
 //             res.send(500);
 //             return console.error('error fetching client from pool', err);
 //         }
 
-//         client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [sender, chatURL, body], function(err, result) {
+//         client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [sender, url, body], function(err, result) {
 //             if(err) {
 //                 res.send(500);
 //                 return console.error('error inserting message into database', err);
@@ -42,20 +40,19 @@ var MAX_ROWS = 3;
 //             res.send(200);
 //         });
 
-//         deleteOldMessages(client, chatURL, res);
+//         deleteOldMessages(client, url, res);
 //     });
 // });
 
 // app.get('/getmessages', function(req, res) {
 //     var url = req.body.url;
-//     var chatURL = '/' + url.split('/')[0].replace('.', '_');
 
 //     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 //         if(err) {
 //             res.send(500);
 //             return console.error('error fetching client from pool', err);
 //         }
-//         client.query("SELECT * FROM message WHERE url=$1", [chatURL], function(err, result) {
+//         client.query("SELECT * FROM message WHERE url=$1", [url], function(err, result) {
 //             if(err) {
 //                 res.send(500);
 //                 return console.error('error getting messages from database', err);
@@ -73,13 +70,11 @@ io.sockets.on('connection', function (socket) {
 
         socket.broadcast.to(data.url).emit('userjoined', data.sender);
 
-        var chatURL = '/' + url.split('/')[0].replace('.', '_');
-
         // pg.connect(process.env.DATABASE_URL, function(err, client, done) {
         //     if(err) {
         //         return socket.emit('error', 'DB connection error');
         //     }
-        //     client.query("SELECT * FROM message WHERE url=$1", [chatURL], function(err, result) {
+        //     client.query("SELECT * FROM message WHERE url=$1", [data.url], function(err, result) {
         //         if(err) {
         //             return socket.emit('error', 'Messages not found');
         //         }
@@ -101,21 +96,19 @@ io.sockets.on('connection', function (socket) {
         var url = data.url;
         var body = data.body;
 
-        var chatURL = '/' + url.split('/')[0].replace('.', '_');
-
         // pg.connect(process.env.DATABASE_URL, function(err, client, done) {
         //     if(err) {
         //         return console.error('error fetching client from pool', err);
         //     }
 
-        //     client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [sender, chatURL, body], function(err, result) {
+        //     client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [sender, data.url, body], function(err, result) {
         //         if(err) {
         //             return console.error('error inserting message into database', err);
         //         }
         //         console.log('Successfully inserted new message!');
         //     });
 
-        //     deleteOldMessages(client, chatURL);
+        //     deleteOldMessages(client, data.url);
         // });
     });
 });
