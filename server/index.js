@@ -90,8 +90,9 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('sendmessage', function(data) {
-        console.log("Got message ", data);
+        console.log("Server Got message:", data, "from client");
         socket.broadcast.to(data.url).emit('newmessage', data);
+        console.log("Now broadcasting message:", data, "to URL: ", data.url);
         var sender = data.sender;
         var url = data.url;
         var body = data.body;

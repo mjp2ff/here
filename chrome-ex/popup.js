@@ -1,5 +1,4 @@
 $(init);
-console.log(io);
 var socket = io.connect("http://glocale.herokuapp.com");
 // var socket = io.connect("http://localhost:843");
 
