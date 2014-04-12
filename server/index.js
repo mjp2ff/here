@@ -1,7 +1,8 @@
 var pg = require('pg');
 var express = require('express');
 var app = express();
-var io = require('socket.io').listen(843);
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
 
 var sockets = {};
 
