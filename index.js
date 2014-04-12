@@ -5,11 +5,17 @@ var app = express();
 
 // app.use(logfmt.requestLogger());
 
+app.configure(function() {
+    app.use(express.bodyParser());
+    app.use(app.router);
+});
+
 app.get('/', function(req, res) {
   res.send('Hello Worlds!');
 });
 
 app.post('/newmessage', function(req, res) {
+    console.log(req);
     sender = req.body.sender;
     url = req.body.url;
     body = req.body.body;
