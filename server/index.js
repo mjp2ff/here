@@ -5,10 +5,10 @@ var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
 // TODO: Check if we need this or not.
-io.configure(function() {
-    io.set("transports", ["xhr-polling"]);
-    io.set("polling duration", 10);
-});
+// io.configure(function() {
+//     io.set("transports", ["xhr-polling"]);
+//     io.set("polling duration", 10);
+// });
 
 var KEEP_TIME_SECONDS = 15*60;   // How many seconds to store messages for
 
