@@ -18,7 +18,7 @@
   "homepage": "https://github.com/mjp2ff/here",
   "dependencies": {
     "pg": "~3.0.2",
-    "express": "~4.0.0",
+    "express": "~3.5.1",
     "logfmt": "~1.1.2"
   }
 }
