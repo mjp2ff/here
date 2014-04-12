@@ -12,14 +12,17 @@ app.get('/', function(req, res) {
 });
 
 app.post('/newmessage', function(req, res) {
-    sender = req.body.sender;
-    url = req.body.url;
-    body = req.body.body;
+    var sender = req.body.sender;
+    var url = req.body.url;
+    var body = req.body.body;
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
         if(err) {
             res.send(500);
             return console.error('error fetching client from pool', err);
         }
+
+        deleteOldMessages(client, url, res);
+
         client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [sender, url, body], function(err, result) {
             if(err) {
                 res.send(500);
@@ -32,7 +35,7 @@ app.post('/newmessage', function(req, res) {
 });
 
 app.get('/getmessages', function(req, res) {
-    url = req.body.url;
+    var url = req.body.url;
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
         if(err) {
             res.send(500);
@@ -53,3 +56,22 @@ var port = Number(process.env.PORT || 5000);
 app.listen(port, function() {
   console.log("Listening on " + port);
 });
+
+function deleteOldMessages(client, url, res) {
+    client.query("SELECT * FROM message WHERE url=$1 ORDER BY time_sent ASC", [url], function(err, result) {
+        if(err) {
+            res.send(500);
+            return console.error('error getting messages from database', err);
+        }
+        var numRows = result.rows.length;
+        if (numRows >= 50) {
+            client.query("DELETE FROM message WHERE url=$1 AND time_sent<$2", [url, result.rows[numRows-3].time_sent], function(err, result) {
+                if(err) {
+                    res.send(500);
+                    return console.error('error deleting old messages from database', err);
+                }
+                console.log('Succesfully deleted old rows!');
+            });
+        }
+    });
+}
