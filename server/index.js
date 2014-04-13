@@ -23,7 +23,7 @@ pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 
             socket.broadcast.to(chatURL).emit('userjoined', {
                 user: data.sender, 
-                num_left: io.sockets.clients(chatURL).length
+                num_users: io.sockets.clients(chatURL).length
             });
 
             client.query("SELECT * FROM graffiti WHERE url=$1", [chatURL], function(err, result) {
@@ -41,7 +41,7 @@ pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             console.log("Unsubscribed ", data.sender, " from ", chatURL);
             socket.broadcast.to(chatURL).emit('userleft', {
                 user: data.sender, 
-                num_left: io.sockets.clients(chatURL).length
+                num_users: io.sockets.clients(chatURL).length
             });
             socket.leave(chatURL);
         });
@@ -63,7 +63,9 @@ pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             console.log("Now broadcasting message:", data, "to URL group:", chatURL);
             deleteOldMessages(client, chatURL, data.sender);
 
-            socket.emit('numusers', io.sockets.clients(chatURL).length);
+            socket.emit('numusers', {
+                num_users: io.sockets.clients(chatURL).length
+            });
         });
 
         socket.on('sendgraffiti', function(data) {
@@ -83,7 +85,9 @@ pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             console.log("Now broadcasting graffiti:", data, "to URL group:", chatURL);
             deleteOldMessages(client, chatURL, data.sender);
 
-            socket.emit('numusers', io.sockets.clients(chatURL).length);
+            socket.emit('numusers', {
+                num_users: io.sockets.clients(chatURL).length
+            });
         });
     });
 

@@ -122,16 +122,24 @@ function init() {
             div_messages.append("<div>" + data.sender + ": <b>" + data.body + "</b></div>");
         });
 
+        socket.on("numusers", function(data) {
+            num_users = data.num_users;
+            console.log("Num users is", num_users);
+            update();
+        });
+
         socket.on("userjoined", function (data) {
             console.log("User", data.user, "has joined");
             num_users = data.num_users;
             div_messages.append("<div><i>" + data.user + " has entered. " + num_users + " users are present.</i></div>");
+            update();
         });
 
         socket.on("userleft", function (data) {
             console.log("User", data.user, "has left");
             num_users = data.num_users;
             div_messages.append("<div><i>" + data.user + " has left the room. " + num_users + " users remain.</i></div>");
+            update();
         });
 
         update();
