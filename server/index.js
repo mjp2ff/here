@@ -73,7 +73,7 @@ pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 
             console.log("Server received graffiti:", data, "from client");
 
-            data.body = data.body.replace(/^:leave/, "");
+            data.body = data.body.replace(/^:leave /, "");
             client.query("INSERT INTO graffiti(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, data.body], function(err, result) {
                 if(err) {
                     return console.error('error inserting graffiti into database', err);
