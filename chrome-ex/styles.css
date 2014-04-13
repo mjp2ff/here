@@ -81,8 +81,9 @@
 
 span.bubble-left
 {
-    display: inline-block;
-    width: 200px;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
     height: auto;
     color: #B6B6B6;
     background-color: #292929;
@@ -98,8 +99,9 @@ span.bubble-left
 }
 span.bubble-right
 {
-    width: 200px;
-    display: inline-block;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
     height: auto;
     color: #B6B6B6;
     background-color: #3a3a3a;
@@ -112,7 +114,6 @@ span.bubble-right
     padding-bottom: 12px;
     padding-right: 10px;
     font-family:"open sans";
-    float: right;
 }
 span.timestamp-left
 {
@@ -121,6 +122,7 @@ span.timestamp-left
     color: #B6B6B6;
     padding: 12px;
     font-size:70%;
+    margin-right: 30px;
     font-family:"open sans";
 }
 span.timestamp-right
@@ -130,21 +132,25 @@ span.timestamp-right
     color: #B6B6B6;
     padding: 12px;
     font-size:70%;
+    margin-left: 30px;
     font-family:"open sans";
-    float: right;
 }
-
-div.message-row-right {
-    display:block;
-    width:100%;
-    margin-top: 35px;
-    margin-bottom: 35px;
+div.message-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
-div.message-row-left {
-    display:block;
-    width:100%;
-    margin-top: 10px;
-}
+/*div.message-row-right {*/
+/*display:block;*/
+/*width:100%;*/
+/*}*/
+/*div.message-row-left {*/
+    /*display:block;*/
+    /*width:100%;*/
+    /*margin-top: 10px;*/
+/*}*/
 div.sender {
     font-family:"open sans";
     font-size:70%;
