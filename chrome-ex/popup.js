@@ -88,6 +88,10 @@ function init() {
                             nickname: "guest" + Math.floor(1 + Math.random() * 42)
                         }, function (items) {
                             div_nick.text(items.nickname);
+                            socket.emit("subscribe", {
+                                url: window.location.href,
+                                sender: div_nick.text()
+                            });
                         });
 
                         input_msg.bind("keyup", updateSelection);
@@ -127,11 +131,6 @@ function init() {
                             chrome.storage.sync.set({
                                 nickname: div_nick.text()
                             });
-                        });
-
-                        socket.emit("subscribe", {
-                            url: window.location.href,
-                            sender: div_nick.text()
                         });
 
                         div_nick.bind("blur", function (e) {
