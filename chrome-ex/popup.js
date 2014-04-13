@@ -126,7 +126,13 @@ function init() {
             console.log("Client received subscribe results from server");
             for (var line in data) {
                 console.log("Client got graffiti:", data[line], "from server");
-                div_messages.append("<div><b>" + data[line].sender + ": " + data[line].body + "</b></div>");
+                //div_messages.append("<div><b>" + data[line].sender + ": " + data[line].body + "</b></div>");
+                $.toast.config.align = 'right';
+                $.toast(data[line].sender + ' left "' + data[line].body + '" behind',
+                    {
+                        duration:10000,
+                        sticky:0
+                    });
             }
         })
 
@@ -138,7 +144,13 @@ function init() {
 
         socket.on("newgraffiti", function (data) {
             console.log("Client sending graffiti w/ data", data);
-            div_messages.append("<div>" + data.sender + ": <b>" + data.body + "</b></div>");
+            //div_messages.append("<div>" + data.sender + ": <b>" + data.body + "</b></div>");
+            $.toast.config.align = 'right';
+            $.toast(data.sender + ' left "' + data.body + '" behind',
+                {
+                    duration:10000,
+                    sticky:0
+                });
         });
 
         socket.on("numusers", function(data) {

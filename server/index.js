@@ -22,11 +22,11 @@ pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             console.log("Subscribed ", data.sender + " to ", chatURL);
 
             socket.broadcast.to(chatURL).emit('userjoined', {
-                user: data.sender, 
+                user: data.sender,
                 num_users: io.sockets.clients(chatURL).length
             });
 
-            client.query("SELECT * FROM graffiti WHERE url=$1", [chatURL], function(err, result) {
+            client.query("SELECT * FROM graffiti WHERE url=$1 ORDER BY time_sent ASC LIMIT 3", [chatURL], function(err, result) {
                 if(err) {
                     return socket.emit('error', 'Graffiti not found');
                 }
@@ -37,10 +37,10 @@ pg.connect(process.env.DATABASE_URL, function(err, client, done) {
         // User left page.
         socket.on('unsubscribe', function(data) {
             var chatURL = data.url.split('/')[2];
-            
+
             console.log("Unsubscribed ", data.sender, " from ", chatURL);
             socket.broadcast.to(chatURL).emit('userleft', {
-                user: data.sender, 
+                user: data.sender,
                 num_users: io.sockets.clients(chatURL).length
             });
             socket.leave(chatURL);
@@ -113,7 +113,7 @@ function deleteOldMessages(client, url, sender) {
         console.log('Successfully deleted old graffiti rows!');
     });
 
-    client.query("DELETE FROM graffiti WHERE url=$1 AND sender=$2 AND time_sent<(SELECT time_sent FROM graffiti WHERE url=$1 AND sender=$2 ORDER BY time_sent DESC LIMIT 1)", 
+    client.query("DELETE FROM graffiti WHERE url=$1 AND sender=$2 AND time_sent<(SELECT time_sent FROM graffiti WHERE url=$1 AND sender=$2 ORDER BY time_sent DESC LIMIT 1)",
             [url, sender], function(err, result) {
         if(err) {
             return console.error('error deleting old user-specific graffiti from database', err);
