@@ -142,6 +142,10 @@ div.message-row {
     margin-top: 15px;
     margin-bottom: 15px;
 }
+div.message-row.right {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
 /*div.message-row-right {*/
 /*display:block;*/
 /*width:100%;*/
@@ -155,6 +159,7 @@ div.sender {
     font-family:"open sans";
     font-size:70%;
     color: #767676;
+    margin-left: 10px;
 }
 
 @font-face {
