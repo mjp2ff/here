@@ -116,15 +116,20 @@ function init() {
                                         sender: div_nick.text(),
                                         body: msg
                                     });
+                                    $.toast.config.align = 'right';
+                                    $.toast('Left "' + msg.substring(7) + '" behind',
+                                        {
+                                            duration: 10000,
+                                            sticky: 0
+                                        });
                                 } else {
                                     socket.emit("sendmessage", {
                                         url: window.location.href,
                                         sender: div_nick.text(),
                                         body: msg
                                     });
+                                    div_messages.append('<div class="message-row"><span class="timestamp-left">' + moment().format('hh:mm a') + '</span><span class="bubble-right">' + msg + '</span></div>');
                                 }
-
-                                div_messages.append('<div class="message-row"><span class="timestamp-left">' + moment().format('hh:mm a') + '</span><span class="bubble-right">' + msg + '</span></div>');
                             }
                         });
                         div_nick.bind("blur", function (e) {
