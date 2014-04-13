@@ -26,7 +26,6 @@ pg.connect(process.env.DATABASE_URL, function(err, client, done) {
                 num_left: io.sockets.clients(chatURL).length
             });
 
-            
             client.query("SELECT * FROM graffiti WHERE url=$1", [chatURL], function(err, result) {
                 if(err) {
                     return socket.emit('error', 'Graffiti not found');
@@ -58,7 +57,7 @@ pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             console.log("test1");
             var isGraffiti = (data.body.indexOf(":leave ") == 0);
             if (isGraffiti) {
-                data.body = data.body.split(":leave ")[1];
+                data.body = data.body.replace(/^:leave/, "");
                 client.query("INSERT INTO graffiti(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, data.body], function(err, result) {
                     if(err) {
                         return console.error('error inserting graffiti into database', err);
