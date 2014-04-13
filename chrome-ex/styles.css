@@ -1,17 +1,19 @@
 #glocale_container {
-    color: darkgreen;
+    color: #dddddd;
     background-color: #242424;
     width: 350px;
     height: 90%;
-    max-height: 500px;
+    max-height: 400px;
     position: fixed;
     right: 8px;
     bottom: 15px;
     z-index: 9999;
-    border-radius: 8px 8px 8px 8px;
+    border-radius: 4px 4px 4px 4px;
     display: flex;
     flex-direction: column;
     word-wrap: break-word;
+    font-family:"open sans" !important;
+
 }
 #glocale_main {
     text-align: left;
@@ -20,8 +22,17 @@
     flex-direction: column;
 }
 #glocale_header {
+    width: 350px;
+    border-radius: 4px 4px 0 0;
+    background-color: #7CC576;
 }
-#glocale_main div {
+#glocale_header_content {
+    border-radius: 0 4px 0 0;
+    /*width: 100%;*/
+    margin-left: 6px;
+    background-color: #3B3B3B;
+    /*display: inline-block;*/
+    padding: 12px;
 }
 #glocale_messages_container {
     display: flex;
@@ -45,6 +56,10 @@
     border-radius: 0 0 8px 8px;
     padding: 12px;
     outline: none;
+    font-size: 200% !important;
+}
+#glocale_close_btn {
+    vertical-align: middle;
 }
 
 
@@ -86,6 +101,6 @@ span.timestamp-left
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
-  font-weight: 400;
+  font-weight: 200;
   src: local('Open Sans'), local('OpenSans'), url(http://themes.googleusercontent.com/static/fonts/opensans/v8/cJZKeOuBrn4kERxqtaUH3bO3LdcAZYWl9Si6vvxL-qU.woff) format('woff');
 }

@@ -9,7 +9,7 @@ $(window).unload(function (){
     });
 });
 
-var div_main, div_messages, div_header, input_msg, div_nick, div_msg_container, div_container;
+var div_main, div_messages, div_header, div_url, input_msg, div_nick, div_msg_container, div_container;
 function init() {
 
     $.get(chrome.extension.getURL("popup.html"), function (data){
@@ -19,13 +19,14 @@ function init() {
         div_messages = $("#glocale_messages");
         input_msg = $("#glocale_input");
         div_header = $("#glocale_header");
+        div_url = $("#glocale_url");
         div_nick = $("#glocale_input_name");
         div_msg_container = $("#glocale_messages_container");
         div_main.bind("mouseenter", function () {
             input_msg.focus();
         });
 
-        div_nick.click(function (e) {
+        div_header.click(function (e) {
             if (div_messages.is(":visible")) {
                 div_msg_container.css("display", "none");
                 input_msg.hide();
@@ -33,13 +34,12 @@ function init() {
                 div_container.height("auto");
                 var autoHeight = div_container.height();
                 div_container.height("90%");
-                div_container.animate({height: autoHeight});
+                div_container.animate({height: autoHeight, bottom: 0});
             } else {
                 div_msg_container.css("display", "flex");
                 input_msg.show();
                 div_container.css("display", "flex");
-                div_container.animate({height: "90%"});
-//                div_container.height("90%");
+                div_container.animate({height: "90%", bottom: "15px"});
             }
         });
 
@@ -123,7 +123,7 @@ function init() {
 }
 
 function update(){
-    div_header.text(window.location.href);
+    div_url.text(window.location.href);
 
 }
 var inputSelection;
