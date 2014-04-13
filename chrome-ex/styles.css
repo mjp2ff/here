@@ -133,12 +133,23 @@ span.timestamp-right
     float: right;
 }
 
-div.message-row {
+div.message-row-right {
     display:block;
     width:100%;
     margin-top: 35px;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
 }
+div.message-row-left {
+    display:block;
+    width:100%;
+    margin-top: 10px;
+}
+div.sender {
+    font-family:"open sans";
+    font-size:70%;
+    color: #767676;
+}
+
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
