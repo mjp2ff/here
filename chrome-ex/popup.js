@@ -80,7 +80,7 @@ function init() {
                     });
                 }
                 // TODO: Right-adjust your own messages.
-                div_messages.append("<div>" + div_nick.text() + ": " + msg + "</div>");
+                div_messages.append('<div class="message-row"><span class="timestamp-left">12:32 am</span><span class="bubble-right">' + msg + '</span></div>');
             }
         });
         div_nick.bind("blur", function (e) {
@@ -104,7 +104,7 @@ function init() {
 
         socket.on("newmessage", function (data) {
             console.log("Client sending message w/ data", data);
-            div_messages.append("<div>" + data.sender + ": " + data.body + "</div>");
+            div_messages.append('<div class="message-row"><span class="bubble-left">' + data.body + '</span><span class="timestamp-right">12:32 am</span></div>');
         });
 
         socket.on("newgraffiti", function (data) {
