@@ -31,8 +31,6 @@
     /*width: 100%;*/
     margin-left: 6px;
     background-color: #3B3B3B;
-    display: flex;
-    flex-direction: row;
     padding: 12px;
 }
 #glocale_url {
