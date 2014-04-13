@@ -195,7 +195,11 @@ function init() {
                 socket.on("userjoined", function (data) {
                     console.log("User", data.user, "has joined");
                     num_users = data.num_users;
-                    div_messages.append("<div><i>" + data.user + " joined. " + num_users + " present.</i></div>");
+                    $.toast(data.user + ' joined. ' + num_users + ' present.',
+                            {
+                                duration: 10000,
+                                sticky: 0
+                            });
                     update();
                     scrollBottom();
                 });
@@ -203,7 +207,11 @@ function init() {
                 socket.on("userleft", function (data) {
                     console.log("User", data.user, "has left");
                     num_users = data.num_users;
-                    div_messages.append("<div><i>" + data.user + " left. " + num_users + " present.</i></div>");
+                    $.toast(data.user + ' left. ' + num_users + ' present.',
+                            {
+                                duration: 10000,
+                                sticky: 0
+                            });
                     update();
                     scrollBottom();
                 });
