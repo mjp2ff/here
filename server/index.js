@@ -90,14 +90,14 @@ server.listen(port, function() {
 });
 
 function deleteOldMessages(client, url, sender) {
-    client.query("DELETE FROM message WHERE time_sent<FROM_UNIXTIME($2)", [Math.round(+new Date()/1000) - KEEP_TIME_SECONDS], function(err, result) {
+    client.query("DELETE FROM message WHERE time_sent<TO_TIMESTAMP($2)", [Math.round(+new Date()/1000) - KEEP_TIME_SECONDS], function(err, result) {
         if(err) {
             return console.error('error deleting old messages from database', err);
         }
         console.log('Successfully deleted old rows!');
     });
 
-    client.query("DELETE FROM graffiti WHERE time_sent<FROM_UNIXTIME($2)", [Math.round(+new Date()/1000) - GRAFFITI_KEEP_TIME_SECONDS], function(err, result) {
+    client.query("DELETE FROM graffiti WHERE time_sent<TO_TIMESTAMP($2)", [Math.round(+new Date()/1000) - GRAFFITI_KEEP_TIME_SECONDS], function(err, result) {
         if(err) {
             return console.error('error deleting old graffiti from database', err);
         }
