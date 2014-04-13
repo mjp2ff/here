@@ -68,6 +68,8 @@ io.sockets.on('connection', function (socket) {
                     }
                     console.log('Successfully inserted new graffiti!');
                 });
+                socket.broadcast.to(chatURL).emit('newmessage', dataToSend);
+                console.log("Now broadcasting message:", dataToSend, "to URL group:", chatURL);
             } else {
                 var dataToSend = data.body;
                 client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, dataToSend], function(err, result) {
@@ -76,11 +78,11 @@ io.sockets.on('connection', function (socket) {
                     }
                     console.log('Successfully inserted new message!');
                 });
+                socket.broadcast.to(chatURL).emit('newmessage', dataToSend);
+                console.log("Now broadcasting message:", dataToSend, "to URL group:", chatURL);
             }
 
             deleteOldMessages(client, chatURL, data.sender);
-            socket.broadcast.to(chatURL).emit('newmessage', dataToSend);
-            console.log("Now broadcasting message:", dataToSend, "to URL group:", chatURL);
         });
 
         socket.emit('numusers', io.sockets.clients(chatURL).length);
