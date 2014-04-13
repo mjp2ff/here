@@ -10,7 +10,7 @@ var GRAFFITI_KEEP_TIME_SECONDS = 60*24*60;  // Same, for graffiti
 
 pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     if(err) {
-        return socket.emit('error', 'DB connection error');
+        return -1;
     }
 
     io.sockets.on('connection', function (socket) {
