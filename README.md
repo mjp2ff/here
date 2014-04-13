@@ -39,5 +39,11 @@ This is our project for hack.UVA 2014! We're turning every website you visit int
 ** Used throughout our client.
 ** Used jquery.toast from soldier-b/jquery.toast for client-side notifications.
 
+* postgreSQL
+** Heroku databases use postgreSQL, so we do too!
+
+* Chrome
+** The client is a Chrome extension.
+
 * TheNounProject
 ** Used to find images for our icons.
