@@ -1,22 +1,23 @@
-div#glocale_main {
+div#glocale_container {
     color: darkgreen;
     background-color: black;
     width: 350px;
     height: 90%;
     max-height: 500px;
     position: fixed;
-    display: table;
-    right: 2px;
-    bottom: 2px;
-    padding: 8px;
-    margin-right: 8px;
+    right: 8px;
+    bottom: 0;
     z-index: 9999;
-    opacity: 0.2;
     border-radius: 8px 8px 0 0;
-    text-align: left;
+    opacity: 0.2;
 }
-div#glocale_main:hover {
+div#glocale_container:hover {
     opacity: 1.0;
+}
+div#glocale_main {
+    display: table;
+    padding: 8px;
+    text-align: left;
 }
 
 div#glocale_main div {
@@ -26,8 +27,9 @@ div#glocale_main div {
 div#glocale_messages {
     display: table-row;
     background-color: black;
-    width: 350px;
+    width: 336px;
     height: 100%;
+    overflow-y: scroll;
     /*max-height: 400px;*/
 }
 
@@ -40,7 +42,6 @@ div#glocale_input_container * {
     display: inline-block;
 }
 span#glocale_input {
-
     min-width: 100px;
     max-width: 350px;
     max-height: 200px;
