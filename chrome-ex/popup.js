@@ -100,15 +100,20 @@ function init() {
                         sender: div_nick.text(),
                         body: msg
                     });
+                    $.toast.config.align = 'right';
+                    $.toast('Left "' + msg.substring(7) + '" behind',
+                        {
+                            duration:4000,
+                            sticky:0
+                        });
                 } else {
                     socket.emit("sendmessage", {
                         url: window.location.href,
                         sender: div_nick.text(),
                         body: msg
                     });
+                    div_messages.append('<div class="message-row-right"><span class="bubble-right">' + msg + '</span><span class="timestamp-left">' + moment().format('hh:mm') + '</span></div>');
                 }
-
-                div_messages.append('<div class="message-row-right"><span class="bubble-right">' + msg + '</span><span class="timestamp-left">' + moment().format('hh:mm') + '</span></div>');
             }
         });
         div_nick.bind("blur", function (e) {
@@ -130,7 +135,7 @@ function init() {
                 $.toast.config.align = 'right';
                 $.toast(data[line].sender + ' left "' + data[line].body + '" behind',
                     {
-                        duration:10000,
+                        duration:7000,
                         sticky:0
                     });
             }
@@ -148,7 +153,7 @@ function init() {
             $.toast.config.align = 'right';
             $.toast(data.sender + ' left "' + data.body + '" behind',
                 {
-                    duration:10000,
+                    duration:7000,
                     sticky:0
                 });
         });
