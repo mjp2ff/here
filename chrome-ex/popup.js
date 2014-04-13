@@ -34,7 +34,20 @@ function init() {
         div_main.bind("mouseenter", function () {
             input_msg.focus();
         });
-
+        chrome.storage.sync.get({
+            expanded: true
+        }, function(items) {
+            if(!items.expanded) {
+                div_msg_container.css("display", "none");
+                input_msg.hide();
+                div_container.css("display", "block");
+                div_container.height("auto");
+                var autoHeight = div_container.height();
+                div_container.height("90%");
+                div_container.height(autoHeight);
+                div_container.css("bottom", 0);
+            }
+        });
         div_header.click(function (e) {
             if (div_messages.is(":visible")) {
                 div_msg_container.css("display", "none");
@@ -44,11 +57,17 @@ function init() {
                 var autoHeight = div_container.height();
                 div_container.height("90%");
                 div_container.animate({height: autoHeight, bottom: 0});
+                chrome.storage.sync.set({
+                    expanded: false
+                });
             } else {
                 div_msg_container.css("display", "flex");
                 input_msg.show();
                 div_container.css("display", "flex");
                 div_container.animate({height: "90%", bottom: "30px"});
+                chrome.storage.sync.set({
+                    expanded: true
+                });
             }
         });
 
