@@ -26,7 +26,7 @@ pg.connect(process.env.DATABASE_URL, function(err, client, done) {
                 num_users: io.sockets.clients(chatURL).length
             });
 
-            client.query("SELECT * FROM graffiti WHERE url=$1 ORDER BY time_sent ASC LIMIT 3", [chatURL], function(err, result) {
+            client.query("SELECT * FROM graffiti WHERE url=$1 ORDER BY time_sent DESC LIMIT 3", [chatURL], function(err, result) {
                 if(err) {
                     return socket.emit('error', 'Graffiti not found');
                 }
