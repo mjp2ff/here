@@ -52,8 +52,6 @@ io.sockets.on('connection', function (socket) {
         var chatURL = data.url.split('/')[2];
 
         console.log("Server received message:", data, "from client");
-        socket.broadcast.to(chatURL).emit('newmessage', data);
-        console.log("Now broadcasting message:", data, "to URL group:", chatURL);
 
         pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             if(err) {
@@ -63,14 +61,16 @@ io.sockets.on('connection', function (socket) {
             var isGraffiti = (data.body.indexOf(":leave ") == 0);
 
             if (isGraffiti) {
-                client.query("INSERT INTO graffiti(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, data.body.split(":leave ")[1]], function(err, result) {
+                var dataToSend = data.body.split(":leave ")[1];
+                client.query("INSERT INTO graffiti(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, dataToSend], function(err, result) {
                     if(err) {
                         return console.error('error inserting graffiti into database', err);
                     }
                     console.log('Successfully inserted new graffiti!');
                 });
             } else {
-                client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, data.body], function(err, result) {
+                var dataToSend = data.body;
+                client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, dataToSend], function(err, result) {
                     if(err) {
                         return console.error('error inserting message into database', err);
                     }
@@ -80,6 +80,10 @@ io.sockets.on('connection', function (socket) {
 
             deleteOldMessages(client, chatURL, data.sender);
         });
+
+        socket.broadcast.to(chatURL).emit('newmessage', dataToSend);
+        console.log("Now broadcasting message:", dataToSend, "to URL group:", chatURL);
+
         socket.emit('numusers', io.sockets.clients(chatURL).length);
     });
 });
