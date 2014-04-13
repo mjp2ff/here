@@ -14,6 +14,7 @@ function init() {
 
     $.get(chrome.extension.getURL("popup.html"), function (data){
         $("body").append(data);
+        div_container = $("#glocale_container");
         div_main = $("#glocale_main");
         div_messages = $("#glocale_messages");
         input_msg = $("#glocale_input");
@@ -21,6 +22,18 @@ function init() {
         div_nick = $("#glocale_input_name");
         div_main.bind("mouseenter", function () {
             input_msg.focus();
+        });
+
+        div_nick.click(function (e) {
+            if (div_messages.is(":visible")) {
+                div_container.height("auto");
+                div_messages.hide();
+                input_msg.hide();
+            } else {
+                div_container.height("90%");
+                div_messages.show();
+                input_msg.show();
+            }
         });
 
         chrome.storage.sync.get({
