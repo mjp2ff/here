@@ -21,7 +21,7 @@ pg.connect(process.env.DATABASE_URL, function(err, client, done) {
             socket.join(chatURL);
             console.log("Subscribed ", data.sender + " to ", chatURL);
 
-            socket.broadcast.to(chatURL).emit('userstatusjoined', {
+            socket.broadcast.to(chatURL).emit('userjoined', {
                 user: data.sender, 
                 num_left: io.sockets.clients(chatURL).length
             });

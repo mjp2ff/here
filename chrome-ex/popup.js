@@ -144,7 +144,7 @@ function scrollBottom(){
 
 function update(){
     div_url.text(window.location.href.split('/')[2]);
-    $("#glocale_online").text(num_users + (num_users > 1 ? "users online" : "user online"));
+    $("#glocale_online").text(num_users + (num_users > 1 ? " users online" : " user online"));
 }
 
 var inputSelection;
