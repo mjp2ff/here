@@ -22,6 +22,7 @@ function init() {
         div_url = $("#glocale_url");
         div_nick = $("#glocale_input_name");
         div_msg_container = $("#glocale_messages_container");
+        $("#glocale_close_btn img").attr("src", chrome.extension.getURL("close_icon.png"));
         div_main.bind("mouseenter", function () {
             input_msg.focus();
         });
@@ -123,7 +124,7 @@ function init() {
 }
 
 function update(){
-    div_url.text(window.location.href);
+    div_url.text(window.location.href.split('/')[2]);
 
 }
 var inputSelection;
