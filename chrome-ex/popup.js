@@ -25,14 +25,14 @@ function init() {
         });
 
         div_nick.click(function (e) {
-            if (div_messages.is(":visible")) {
-                div_container.height("auto");
+            if (div_messages.is(':visible')) {
                 div_messages.hide();
                 input_msg.hide();
+                div_container.animate({height: '4%'});
             } else {
-                div_container.height("90%");
                 div_messages.show();
                 input_msg.show();
+                div_container.animate({height: '90%'});
             }
         });
 
