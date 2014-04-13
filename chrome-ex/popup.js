@@ -115,5 +115,7 @@ var inputSelection;
 function updateSelection() {
 //    console.log(input_msg.is(":focus"));
     inputSelection = window.getSelection().getRangeAt(0);
+//    console.log(div_messages[0].scrollHeight);
+    div_messages[0].scrollTop = div_messages[0].scrollHeight;
 }
 // var elt=evt.target; elt.innerText=elt.innerText.replace(/\n/g,' ');
