@@ -88,7 +88,7 @@ function init() {
                     });
                 }
                 // TODO: Right-adjust your own messages.
-                div_messages.append('<div class="message-row"><span class="timestamp-left">12:32 am</span><span class="bubble-right">' + msg + '</span></div>');
+                div_messages.append('<div class="message-row"><span class="bubble-right">' + msg + '</span><span class="timestamp-left">12:32 am</span></div>');
             }
         });
         div_nick.bind("blur", function (e) {
