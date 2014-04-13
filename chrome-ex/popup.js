@@ -47,13 +47,13 @@ function init() {
 
                 if (msg.length == 0) return;
                 if (msg.indexOf(":leave ") == 0) {
-                    socket.emit("sendmessage", {
+                    socket.emit("sendgraffiti", {
                         url: window.location.href,
                         sender: div_nick.text(),
                         body: msg
                     });
                 } else {
-                    socket.emit("sendgraffiti", {
+                    socket.emit("sendmessage", {
                         url: window.location.href,
                         sender: div_nick.text(),
                         body: msg
