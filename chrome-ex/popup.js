@@ -48,7 +48,7 @@ function init() {
                 div_msg_container.css("display", "flex");
                 input_msg.show();
                 div_container.css("display", "flex");
-                div_container.animate({height: "90%", bottom: "15px"});
+                div_container.animate({height: "90%", bottom: "30px"});
             }
         });
 
