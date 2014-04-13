@@ -14,11 +14,11 @@ function init() {
 
     $.get(chrome.extension.getURL("popup.html"), function (data){
         $("body").append(data);
-        div_main = $("div#glocale_main");
-        div_messages = $("div#glocale_messages");
-        input_msg = $("span#glocale_input");
-        div_header = $("div#glocale_header");
-        div_nick = $("div#glocale_input_name");
+        div_main = $("#glocale_main");
+        div_messages = $("#glocale_messages");
+        input_msg = $("#glocale_input");
+        div_header = $("#glocale_header");
+        div_nick = $("#glocale_input_name");
         div_main.bind("mouseenter", function () {
             input_msg.focus();
         });

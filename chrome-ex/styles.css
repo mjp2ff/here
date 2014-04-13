@@ -19,8 +19,9 @@ div#glocale_main {
     padding: 8px;
     text-align: left;
 }
-
-div#glocale_main div {
+#glocale_header {
+}
+#glocale_main div {
 
 }
 
@@ -34,7 +35,7 @@ div#glocale_messages {
 }
 
 div#glocale_input_container {
-    width: 350px;
+    width: 336px;
     color: wheat;
 }
 div#glocale_input_container * {
@@ -42,8 +43,7 @@ div#glocale_input_container * {
     display: inline-block;
 }
 span#glocale_input {
-    min-width: 100px;
-    max-width: 350px;
+    width: 100%;
     max-height: 200px;
     /*overflow-y: scroll;*/
 }
