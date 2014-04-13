@@ -50,6 +50,8 @@
     font-size: 140% !important;
 }
 #glocale_messages_container {
+    padding-top: 4px;
+    padding-bottom: 4px;
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -58,7 +60,6 @@
 #glocale_messages {
     width: 350px;
     overflow-y: auto;
-
 }
 
 #glocale_input_container {
@@ -71,7 +72,7 @@
     border-radius: 0 0 8px 8px;
     padding: 12px;
     outline: none;
-    font-size: 200% !important;
+    font-size: 170% !important;
 }
 #glocale_close_btn {
     vertical-align: middle;

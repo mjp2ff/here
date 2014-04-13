@@ -1,6 +1,14 @@
+chrome.browserAction.onClicked.addListener(function (tab) {
+    chrome.storage.sync.get({
+        visible: true
+    }, function (items) {
+        if (!items.visible){
+            chrome.storage.sync.set({
+                visible: true
+            }, function () {
+                chrome.tabs.executeScript({code: "init()"});
+            });
+        }
+    });
 
-var currentUrl = "url";
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    console.log(tab);
-    currentUrl = tab.url;
 });
