@@ -59,11 +59,6 @@ function init() {
             div_messages.append("<div>" + data.sender + ": " + data.body + "</div>");
         });
 
-        socket.on("newgraffiti", function (data) {
-            console.log("Client sending graffiti w/ data", data);
-            div_messages.append("<div>" + data.sender + ": " + data.body + "</div>");
-        });
-
         update();
     });
 }
