@@ -8,10 +8,11 @@ See package.json for a list of requirements/dependencies. Additionally, you'll n
 
 ## TODO
 
-* Set up Javascript sample client.
-** Polling (time-based)
-** Send message (on prompt)
-* Front-end stuff!
+* Pick good color pallette to use
+* Fix error with text overflowing screen (vertically AND horizontally)
+* Find better way to display room title, and username)
+* Make features (change name, etc). more obvious
+* General improvements
 
 ## Potential new features
 
