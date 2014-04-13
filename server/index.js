@@ -79,10 +79,9 @@ io.sockets.on('connection', function (socket) {
             }
 
             deleteOldMessages(client, chatURL, data.sender);
+            socket.broadcast.to(chatURL).emit('newmessage', dataToSend);
+            console.log("Now broadcasting message:", dataToSend, "to URL group:", chatURL);
         });
-
-        socket.broadcast.to(chatURL).emit('newmessage', dataToSend);
-        console.log("Now broadcasting message:", dataToSend, "to URL group:", chatURL);
 
         socket.emit('numusers', io.sockets.clients(chatURL).length);
     });
