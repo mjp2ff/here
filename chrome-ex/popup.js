@@ -88,7 +88,8 @@ function init() {
                         body: msg
                     });
                 }
-                div_messages.append("<div>" + div_nick.text() + ": " + msg + "</div>");
+
+                div_messages.append('<div class="message-row"><span class="timestamp-left">12:32 am</span><span class="bubble-right">' + msg + '</span></div>');
             }
         });
         div_nick.bind("blur", function (e) {
@@ -112,7 +113,8 @@ function init() {
 
         socket.on("newmessage", function (data) {
             console.log("Client sending message w/ data", data);
-            div_messages.append("<div>" + data.sender + ": " + data.body + "</div>");
+            div_messages.append('<div class="message-row"><span class="bubble-left">' + data.body + '</span><span class="timestamp-right">12:32 am</span></div>');
+            scrollBottom();
         });
 
         socket.on("newgraffiti", function (data) {
@@ -136,6 +138,10 @@ function init() {
     });
 }
 
+function scrollBottom(){
+    div_messages[0].scrollTop = div_messages[0].scrollHeight;
+}
+
 function update(){
     div_url.text(window.location.href.split('/')[2]);
     $("#glocale_online").text(num_users + (num_users > 1 ? "users online" : "user online"));
@@ -146,6 +152,6 @@ function updateSelection() {
 //    console.log(input_msg.is(":focus"));
     inputSelection = window.getSelection().getRangeAt(0);
 //    console.log(div_messages[0].scrollHeight);
-    div_messages[0].scrollTop = div_messages[0].scrollHeight;
+    scrollBottom();
 }
 // var elt=evt.target; elt.innerText=elt.innerText.replace(/\n/g,' ');

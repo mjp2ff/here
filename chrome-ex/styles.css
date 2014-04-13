@@ -31,8 +31,6 @@
     /*width: 100%;*/
     margin-left: 6px;
     background-color: #3B3B3B;
-    display: flex;
-    flex-direction: row;
     padding: 12px;
 }
 #glocale_url {
@@ -45,7 +43,7 @@
 
 }
 #glocale_messages {
-    width: 336px;
+    width: 350px;
     overflow-y: auto;
 
 }
@@ -69,7 +67,7 @@
 
 span.bubble-left
 {
-    width: 50%;
+    width: 200px;
     height: auto;
     color: #B6B6B6;
     background-color: #292929;
@@ -77,12 +75,15 @@ span.bubble-left
     border-right: 1px solid #353535;
     border-top: 1px solid #353535;
     border-bottom: 1px solid #353535;
-    padding: 12px;
+    padding-top: 12px;
+    padding-left: 0px;
+    padding-bottom: 12px;
+    padding-right: 12px
     font-family:"open sans";
 }
 span.bubble-right
 {
-    width: 50%;
+    width: 200px;
     height: auto;
     color: #B6B6B6;
     background-color: #3a3a3a;
@@ -90,17 +91,37 @@ span.bubble-right
     border-left: 1px solid #4B4B4B;
     border-top: 1px solid #4B4B4B;
     border-bottom: 1px solid #4B4B4B;
-    padding: 12px;
+    padding-top: 12px;
+    padding-left: 12px;
+    padding-bottom: 12px;
+    padding-right: 0px;
     font-family:"open sans";
+    float: right;
 }
 span.timestamp-left
 {
-    width: 50%;
+    width: auto;
     height: auto;
     color: #B6B6B6;
     padding: 12px;
     font-size:70%;
     font-family:"open sans";
+}
+span.timestamp-right
+{
+    width: auto;
+    height: auto;
+    color: #B6B6B6;
+    padding: 12px;
+    font-size:70%;
+    font-family:"open sans";
+    float: right;
+}
+
+div.message-row {
+    display:block;
+    width:100%;
+    margin-top: 35px;
 }
 @font-face {
   font-family: 'Open Sans';
