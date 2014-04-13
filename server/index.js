@@ -8,23 +8,25 @@ io.set('log level', 1);
 var KEEP_TIME_SECONDS = 15*60;   // How many seconds to store messages for
 var GRAFFITI_KEEP_TIME_SECONDS = 60*24*60;  // Same, for graffiti
 
-io.sockets.on('connection', function (socket) {
-    // User joined page.
-    socket.on('subscribe', function(data) {
-        var chatURL = data.url.split('/')[2];
+pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+    if(err) {
+        return socket.emit('error', 'DB connection error');
+    }
 
-        socket.join(chatURL);
-        console.log("Subscribed ", data.sender + " to ", chatURL);
+    io.sockets.on('connection', function (socket) {
+        // User joined page.
+        socket.on('subscribe', function(data) {
+            var chatURL = data.url.split('/')[2];
 
-        socket.broadcast.to(chatURL).emit('userjoined', {
-            user: data.sender, 
-            num_left: io.sockets.clients(chatURL).length
-        });
+            socket.join(chatURL);
+            console.log("Subscribed ", data.sender + " to ", chatURL);
 
-        pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-            if(err) {
-                return socket.emit('error', 'DB connection error');
-            }
+            socket.broadcast.to(chatURL).emit('userjoined', {
+                user: data.sender, 
+                num_left: io.sockets.clients(chatURL).length
+            });
+
+            
             client.query("SELECT * FROM graffiti WHERE url=$1", [chatURL], function(err, result) {
                 if(err) {
                     return socket.emit('error', 'Graffiti not found');
@@ -33,56 +35,52 @@ io.sockets.on('connection', function (socket) {
                 socket.emit('graffiti', result.rows);
             });
         });
-    });
 
-    // User left page.
-    socket.on('unsubscribe', function(data) {
-        var chatURL = data.url.split('/')[2];
-        
-        console.log("Unsubscribed ", data.sender, " from ", chatURL);
-        socket.broadcast.to(chatURL).emit('userleft', {
-            user: data.sender, 
-            num_left: io.sockets.clients(chatURL).length
+        // User left page.
+        socket.on('unsubscribe', function(data) {
+            var chatURL = data.url.split('/')[2];
+            
+            console.log("Unsubscribed ", data.sender, " from ", chatURL);
+            socket.broadcast.to(chatURL).emit('userleft', {
+                user: data.sender, 
+                num_left: io.sockets.clients(chatURL).length
+            });
+            socket.leave(chatURL);
         });
-        socket.leave(chatURL);
-    });
 
-    // Someone sent a message!
-    socket.on('sendmessage', function(data) {
-        var chatURL = data.url.split('/')[2];
+        // Someone sent a message!
+        socket.on('sendmessage', function(data) {
+            var chatURL = data.url.split('/')[2];
 
-        console.log("Server received message:", data, "from client");
+            console.log("Server received message:", data, "from client");
 
-        pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-            if(err) {
-                return console.error('error fetching client from pool', err);
-            }
 
             console.log("test1");
-            // var isGraffiti = (data.body.indexOf(":leave ") == 0);
-            // if (isGraffiti) {
-                // data.body = data.body.split(":leave ")[1];
-            //     client.query("INSERT INTO graffiti(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, data.body], function(err, result) {
-            //         if(err) {
-            //             return console.error('error inserting graffiti into database', err);
-            //         }
-            //         console.log('Successfully inserted new graffiti!');
-            //     });
-            // } else {
+            var isGraffiti = (data.body.indexOf(":leave ") == 0);
+            if (isGraffiti) {
+                data.body = data.body.split(":leave ")[1];
+                client.query("INSERT INTO graffiti(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, data.body], function(err, result) {
+                    if(err) {
+                        return console.error('error inserting graffiti into database', err);
+                    }
+                    console.log('Successfully inserted new graffiti!');
+                });
+            } else {
                 client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, data.body], function(err, result) {
                     if(err) {
                         return console.error('error inserting message into database', err);
                     }
                     console.log('Successfully inserted new message!');
                 });
-            // }
+            }
             socket.broadcast.to(chatURL).emit('newmessage', data);
             console.log("Now broadcasting message:", data, "to URL group:", chatURL);
             deleteOldMessages(client, chatURL, data.sender);
-        });
 
-        socket.emit('numusers', io.sockets.clients(chatURL).length);
+            socket.emit('numusers', io.sockets.clients(chatURL).length);
+        });
     });
+
 });
 
 var port = Number(process.env.PORT || 5000);
