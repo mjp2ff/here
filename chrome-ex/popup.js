@@ -50,6 +50,9 @@ function init() {
 
                         div_header.click(function (e) {
                             if (div_messages.is(":visible")) {
+                                chrome.storage.sync.set({
+                                    expanded: false
+                                });
                                 div_msg_container.css("display", "none");
                                 input_msg.hide();
                                 div_container.css("display", "block");
@@ -58,6 +61,9 @@ function init() {
                                 div_container.height("90%");
                                 div_container.animate({height: autoHeight, bottom: 0});
                             } else {
+                                chrome.storage.sync.set({
+                                    expanded: true
+                                });
                                 div_msg_container.css("display", "flex");
                                 input_msg.show();
                                 div_container.css("display", "flex");
