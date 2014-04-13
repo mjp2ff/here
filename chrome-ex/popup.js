@@ -1,5 +1,6 @@
 $(init);
 var socket = io.connect("http://glocale.herokuapp.com");
+var moment = require('moment');
 // var socket = io.connect("http://localhost:843");
 
 $(window).unload(function (){
@@ -10,6 +11,7 @@ $(window).unload(function (){
 });
 
 var div_main, div_messages, div_header, div_url, input_msg, div_nick, div_msg_container, div_container;
+var num_users = 1;
 
 chrome.browserAction.onClicked.addListener(function callback() {
     if (false) {
@@ -87,8 +89,8 @@ function init() {
                         body: msg
                     });
                 }
-                // TODO: Right-adjust your own messages.
-                div_messages.append('<div class="message-row"><span class="bubble-right">' + msg + '</span><span class="timestamp-left">12:32 am</span></div>');
+
+                div_messages.append('<div class="message-row"><span class="bubble-right">' + msg + '</span><span class="timestamp-left">' + moment().format('hh:mm') + '</span></div>');
             }
         });
         div_nick.bind("blur", function (e) {
@@ -112,7 +114,8 @@ function init() {
 
         socket.on("newmessage", function (data) {
             console.log("Client sending message w/ data", data);
-            div_messages.append('<div class="message-row"><span class="bubble-left">' + data.body + '</span><span class="timestamp-right">12:32 am</span></div>');
+            div_messages.append('<div class="message-row"><span class="bubble-left">' + data.body + '</span><span class="timestamp-right">' + moment().format('hh:mm') + '</span></div>');
+            scrollBottom();
         });
 
         socket.on("newgraffiti", function (data) {
@@ -120,25 +123,44 @@ function init() {
             div_messages.append("<div>" + data.sender + ": <b>" + data.body + "</b></div>");
         });
 
+        socket.on("numusers", function(data) {
+            num_users = data.num_users;
+            console.log("Num users is", num_users);
+            update();
+        });
+
+        socket.on("userjoined", function (data) {
+            console.log("User", data.user, "has joined");
+            num_users = data.num_users;
+            div_messages.append("<div><i>" + data.user + " joined. " + num_users + " present.</i></div>");
+            update();
+        });
 
         socket.on("userleft", function (data) {
             console.log("User", data.user, "has left");
-            div_messages.append("<div><i>" + data.user + " has left the room. " + data.num_left + " users remain.</i></div>");
+            num_users = data.num_users;
+            div_messages.append("<div><i>" + data.user + " left. " + num_users + " present.</i></div>");
+            update();
         });
 
         update();
     });
 }
 
+function scrollBottom(){
+    div_messages[0].scrollTop = div_messages[0].scrollHeight;
+}
+
 function update(){
     div_url.text(window.location.href.split('/')[2]);
-
+    $("#glocale_online").text(num_users + (num_users > 1 ? " users online" : " user online"));
 }
+
 var inputSelection;
 function updateSelection() {
 //    console.log(input_msg.is(":focus"));
     inputSelection = window.getSelection().getRangeAt(0);
 //    console.log(div_messages[0].scrollHeight);
-    div_messages[0].scrollTop = div_messages[0].scrollHeight;
+    scrollBottom();
 }
 // var elt=evt.target; elt.innerText=elt.innerText.replace(/\n/g,' ');
