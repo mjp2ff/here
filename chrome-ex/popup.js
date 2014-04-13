@@ -113,6 +113,7 @@ function init() {
         socket.on("newmessage", function (data) {
             console.log("Client sending message w/ data", data);
             div_messages.append('<div class="message-row"><span class="bubble-left">' + data.body + '</span><span class="timestamp-right">12:32 am</span></div>');
+            scrollBottom();
         });
 
         socket.on("newgraffiti", function (data) {
@@ -130,6 +131,10 @@ function init() {
     });
 }
 
+function scrollBottom(){
+    div_messages[0].scrollTop = div_messages[0].scrollHeight;
+}
+
 function update(){
     div_url.text(window.location.href.split('/')[2]);
 
@@ -139,6 +144,6 @@ function updateSelection() {
 //    console.log(input_msg.is(":focus"));
     inputSelection = window.getSelection().getRangeAt(0);
 //    console.log(div_messages[0].scrollHeight);
-    div_messages[0].scrollTop = div_messages[0].scrollHeight;
+    scrollBottom();
 }
 // var elt=evt.target; elt.innerText=elt.innerText.replace(/\n/g,' ');
