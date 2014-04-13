@@ -61,7 +61,7 @@ io.sockets.on('connection', function (socket) {
             var isGraffiti = (data.body.indexOf(":leave ") == 0);
 
             if (isGraffiti) {
-                data.body = data.body.split(":leave ")[1];
+                // data.body = data.body.split(":leave ")[1];
                 client.query("INSERT INTO graffiti(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, data.body], function(err, result) {
                     if(err) {
                         return console.error('error inserting graffiti into database', err);
