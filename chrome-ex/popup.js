@@ -11,6 +11,7 @@ $(window).unload(function () {
 
 var div_main, div_messages, div_header, div_url, input_msg, div_nick, div_msg_container, div_container;
 var num_users = 1;
+var firstLoad = true;
 
 function init() {
     chrome.storage.sync.get({
@@ -143,7 +144,12 @@ function init() {
                     }
                 );
 
-                if (socket.socket.connected) return;
+                if (firstLoad) {
+                    firstLoad = false;
+                } else {
+                    update();
+                    return;
+                }
 
 //                console.log(socket.socket.connected);
 
