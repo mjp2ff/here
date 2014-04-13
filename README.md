@@ -47,3 +47,14 @@ This is our project for hack.UVA 2014! We're turning every website you visit int
 
 * TheNounProject
 ** Used to find images for our icons.
+
+## Special Thanks
+
+* Andy Locascio
+** Helped us a ton with our design!
+
+* Nick Quinlan
+** Helped us with node.js, sockets, general encouragement, and bubble wrap provision.
+
+* Andrew Carter
+** Helped us with CSS, HTML, general styling.
