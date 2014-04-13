@@ -14,7 +14,7 @@
     "content_scripts": [
         {
             "css": [ "styles.css" ],
-            "js": ["jquery-latest.min.js","socket.io.js", "popup.js" ],
+            "js": ["jquery-latest.min.js","socket.io.js", "moment.min.js", "popup.js" ],
             "matches": [ "http://*/*", "https://*/*" ],
             "run_at": "document_idle"
         }
@@ -25,5 +25,5 @@
         "http://*/*", "https://*/*",
         "http://glocale.herokuapp.com/"
     ],
-    "web_accessible_resources": ["jquery-latest.min.js", "jquery-latest.min.map","socket.io.js", "popup.js", "popup.html", "close_icon.png" ]
+    "web_accessible_resources": ["jquery-latest.min.js", "jquery-latest.min.map","socket.io.js","moment.min.js", "popup.js", "popup.html", "close_icon.png" ]
 }

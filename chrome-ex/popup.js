@@ -1,6 +1,5 @@
 $(init);
 var socket = io.connect("http://glocale.herokuapp.com");
-var moment = require('moment');
 // var socket = io.connect("http://localhost:843");
 
 $(window).unload(function (){
