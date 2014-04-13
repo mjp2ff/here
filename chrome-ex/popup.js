@@ -11,11 +11,11 @@ $(window).unload(function (){
 
 var div_main, div_messages, div_header, div_url, input_msg, div_nick, div_msg_container, div_container;
 
-chrome.browserAction.onClicked.addListener(function callback) {
+chrome.browserAction.onClicked.addListener(function callback() {
     if (false) {
         $(init);
     }
-}
+});
 
 function init() {
 
