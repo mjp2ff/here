@@ -28,7 +28,7 @@ function init() {
             if (div_messages.is(':visible')) {
                 div_messages.hide();
                 input_msg.hide();
-                div_container.animate({height: '4%'});
+                div_container.animate({height: '30px'});
             } else {
                 div_messages.show();
                 input_msg.show();

@@ -21,6 +21,7 @@
     flex-direction: column;
 }
 #glocale_header {
+    height: 30px;
     display: none;
 }
 #glocale_main div {
