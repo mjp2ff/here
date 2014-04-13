@@ -76,8 +76,15 @@
 }
 #glocale_close_btn {
     vertical-align: middle;
+    width: auto !important;
+    height: auto !important;
+    padding: 0 !important;
 }
-
+#glocale_close_btn img {
+    width: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+}
 
 span.bubble-left
 {
