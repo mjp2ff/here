@@ -131,14 +131,14 @@ function init() {
         socket.on("userjoined", function (data) {
             console.log("User", data.user, "has joined");
             num_users = data.num_users;
-            div_messages.append("<div><i>" + data.user + " has entered. " + num_users + " users are present.</i></div>");
+            div_messages.append("<div><i>" + data.user + " joined. " + num_users + " present.</i></div>");
             update();
         });
 
         socket.on("userleft", function (data) {
             console.log("User", data.user, "has left");
             num_users = data.num_users;
-            div_messages.append("<div><i>" + data.user + " has left the room. " + num_users + " users remain.</i></div>");
+            div_messages.append("<div><i>" + data.user + " left. " + num_users + " present.</i></div>");
             update();
         });
 
