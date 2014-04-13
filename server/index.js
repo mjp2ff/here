@@ -3,6 +3,7 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
+io.set('log level', 1);
 
 var KEEP_TIME_SECONDS = 15*60;   // How many seconds to store messages for
 var GRAFFITI_KEEP_TIME_SECONDS = 60*24*60;  // Same, for graffiti
