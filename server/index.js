@@ -93,16 +93,21 @@ function deleteOldMessages(client, url, sender) {
         if(err) {
             return console.error('error deleting old messages from database', err);
         }
-        console.log('Succesfully deleted old rows!');
+        console.log('Successfully deleted old rows!');
     });
 
     client.query("DELETE FROM graffiti WHERE url=$1 AND time_sent<$2", [url, Math.round(+new Date()/1000) - GRAFFITI_KEEP_TIME_SECONDS], function(err, result) {
         if(err) {
             return console.error('error deleting old graffiti from database', err);
         }
-        console.log('Succesfully deleted old graffiti rows!');
+        console.log('Successfully deleted old graffiti rows!');
     });
 
-    client.query("DELETE FROM graffiti WHERE url=$1 AND sender=$2 AND time_sent<
-                    (SELECT time_sent FROM graffiti WHERE url=$1 AND sender=$2 ORDER BY time_sent DESC LIMIT 1)", [url, sender])
+    client.query("DELETE FROM graffiti WHERE url=$1 AND sender=$2 AND time_sent<(SELECT time_sent FROM graffiti WHERE url=$1 AND sender=$2 ORDER BY time_sent DESC LIMIT 1)", 
+            [url, sender], function(err, result) {
+        if(err) {
+            return console.error('error deleting old user-specific graffiti from database', err);
+        }
+        console.log('Successfully deleted old user-specific graffiti rows!');
+    });
 }
