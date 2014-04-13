@@ -2,6 +2,13 @@ $(init);
 var socket = io.connect("http://glocale.herokuapp.com");
 // var socket = io.connect("http://localhost:843");
 
+$(window).unload(function (){
+    socket.emit("unsubscribe", {
+        url: window.location.href,
+        sender: div_nick.text()
+    });
+});
+
 var div_main, div_messages, div_header, input_msg, div_nick;
 function init() {
 
@@ -28,19 +35,24 @@ function init() {
             if (inputSelection == null) return;
 //            console.log(inputSelection);
             window.getSelection().removeAllRanges();
-            window.getSelection().addRange(inputSelection)
+            window.getSelection().addRange(inputSelection);
         });
-        input_msg.bind("keyup", function (e) {
+        input_msg.bind("keydown", function (e) {
             if (!e.shiftKey && e.which == 13) {
-//                console.log(input_msg.html().replace("<br>", "\n"));
+                e.preventDefault();
+                var msg = input_msg.html();
+                input_msg.html("");
+                msg = msg.replace(/<br>$/, "");
+                msg = msg.replace(/<br>$/, "");
+
+                if (msg.length == 0) return;
                 socket.emit("sendmessage", {
                     url: window.location.href,
                     sender: div_nick.text(),
-                    body: input_msg.html()
+                    body: msg
                 });
                 // TODO: Right-adjust your own messages.
-                div_messages.append("<div>" + div_nick.text() + ": " + input_msg.html() + "</div>");
-                input_msg.html("");
+                div_messages.append("<div>" + div_nick.text() + ": " + msg + "</div>");
             }
         });
         div_nick.bind("blur", function (e) {
