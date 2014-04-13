@@ -30,8 +30,6 @@ This is our project for hack.UVA 2014! We're turning every website you visit int
 	* Heroku databases use postgreSQL, so we do too!
 * Chrome
 	* The client is a Chrome extension.
-* TheNounProject
-	* Used to find images for our icons.
 
 ## Special Thanks
 
@@ -41,6 +39,8 @@ This is our project for hack.UVA 2014! We're turning every website you visit int
 	* Helped us with node.js, sockets, general encouragement, and bubble wrap provision.
 * Andrew Carter
 	* Helped us with CSS, HTML, general styling.
+* TheNounProject
+	* Used to find images for our icons.
 
 ## Authors
 
