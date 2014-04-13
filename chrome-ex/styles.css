@@ -31,7 +31,8 @@
     /*width: 100%;*/
     margin-left: 6px;
     background-color: #3B3B3B;
-    /*display: inline-block;*/
+    display: flex;
+    flex-direction: row;
     padding: 12px;
 }
 #glocale_messages_container {
