@@ -72,6 +72,24 @@ function init() {
                             }
                         });
 
+                        div_nick.bind("click", function (e) {
+                            e.stopPropagation();
+                        });
+                        div_nick.bind("keydown", function (e) {
+                            if (e.which == 13) {
+                                e.preventDefault();
+                                div_nick.blur();
+                            }
+                        });
+                        div_nick.bind("keyup", function () {
+                            div_nick.html(div_nick.text());
+                        });
+                        div_nick.bind("blur", function (e) {
+                            chrome.storage.sync.set({
+                                nickname: div_nick.text()
+                            });
+                        });
+
                         $("#glocale_close_btn").bind("click", function () {
                             socket.emit("unsubscribe", {
                                 url: window.location.href,
@@ -127,17 +145,7 @@ function init() {
                                 div_messages.append('<div class="message-row"><span class="timestamp-left">' + moment().format('hh:mm a') + '</span><span class="bubble-right">' + msg + '</span></div>');
                             }
                         });
-                        div_nick.bind("blur", function (e) {
-                            chrome.storage.sync.set({
-                                nickname: div_nick.text()
-                            });
-                        });
 
-                        div_nick.bind("blur", function (e) {
-                            chrome.storage.sync.set({
-                                nickname: div_nick.text()
-                            });
-                        });
 
 //                        div_messages.append('<div class="message-row"><span class="bubble-right">' + msg + '</span><span class="timestamp-left">' + moment().format('hh:mm') + '</span></div>');
                     }
