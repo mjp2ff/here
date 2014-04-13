@@ -52,19 +52,33 @@ span.bubble-left
 {
     width: 50%;
     height: auto;
-    color: #dddddd;
-    background-color: #1f1f1f;
-    border-radius: 0 8px 8px 0;
-    border: 2px solid #4a4a4a;
+    color: #B6B6B6;
+    background-color: #292929;
+    border-radius: 0 7px 7px 0;
+    border-right: 1px solid #353535;
+    border-top: 1px solid #353535;
+    border-bottom: 1px solid #353535;
     padding: 12px;
     font-family:"open sans";
 }
-
+span.bubble-right
+{
+    width: 50%;
+    height: auto;
+    color: #B6B6B6;
+    background-color: #3a3a3a;
+    border-radius: 7px 0 0 7px;
+    border-left: 1px solid #4B4B4B;
+    border-top: 1px solid #4B4B4B;
+    border-bottom: 1px solid #4B4B4B;
+    padding: 12px;
+    font-family:"open sans";
+}
 span.timestamp-left
 {
     width: 50%;
     height: auto;
-    color: #dddddd;
+    color: #B6B6B6;
     padding: 12px;
     font-size:70%;
     font-family:"open sans";
