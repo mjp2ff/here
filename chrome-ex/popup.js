@@ -124,7 +124,7 @@ function init() {
 }
 
 function update(){
-    div_url.text(window.location.href);
+    div_url.text(window.location.href.split('/')[2]);
 
 }
 var inputSelection;
