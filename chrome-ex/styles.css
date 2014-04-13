@@ -44,3 +44,31 @@
 }
 #glocale_input {
 }
+
+span.bubble-left
+{
+    width: 50%;
+    height: auto;
+    color: #dddddd;
+    background-color: #1f1f1f;
+    border-radius: 0 8px 8px 0;
+    border: 2px solid #4a4a4a;
+    padding: 12px;
+    font-family:"open sans";
+}
+
+span.timestamp-left
+{
+    width: 50%;
+    height: auto;
+    color: #dddddd;
+    padding: 12px;
+    font-size:70%;
+    font-family:"open sans";
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(http://themes.googleusercontent.com/static/fonts/opensans/v8/cJZKeOuBrn4kERxqtaUH3bO3LdcAZYWl9Si6vvxL-qU.woff) format('woff');
+}
