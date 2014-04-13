@@ -30,7 +30,7 @@ pg.connect(process.env.DATABASE_URL, function(err, client, done) {
                 if(err) {
                     return socket.emit('error', 'Graffiti not found');
                 }
-                socket.emit('graffiti', result.rows);
+                socket.emit('subscriberesult', result.rows);
             });
         });
 

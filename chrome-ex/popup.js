@@ -87,6 +87,14 @@ function init() {
             sender: div_nick.text()
         });
 
+        socket.on("subscriberesult", function(data) {
+            console.log("Client received subscribe results from server");
+            for (var line in data) {
+                console.log("Client got graffiti:", data[line], "from server");
+                div_messages.append("<div><b>" + data[line].sender + ": " + data[line].body + "</b></div>");
+            }
+        })
+
         socket.on("newmessage", function (data) {
             console.log("Client sending message w/ data", data);
             div_messages.append("<div>" + data.sender + ": " + data.body + "</div>");
