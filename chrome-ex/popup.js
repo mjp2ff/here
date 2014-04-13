@@ -120,7 +120,7 @@ function init() {
                                     });
                                 }
 
-                                div_messages.append('<div class="message-row"><span class="timestamp-left">' + moment().format('hh:mm') + '</span><span class="bubble-right">' + msg + '</span></div>');
+                                div_messages.append('<div class="message-row"><span class="timestamp-left">' + moment().format('hh:mm a') + '</span><span class="bubble-right">' + msg + '</span></div>');
                             }
                         });
                         div_nick.bind("blur", function (e) {
@@ -170,7 +170,7 @@ function init() {
 
                 socket.on("newmessage", function (data) {
                     console.log("Client sending message w/ data", data);
-                    div_messages.append('<div class="sender"><i>'+data.sender+'</i></div><div class="message-row right"><span class="bubble-left">' + data.body + '</span><span class="timestamp-right">' + moment().format('hh:mm') + '</span></div>');
+                    div_messages.append('<div class="sender"><i>'+data.sender+'</i></div><div class="message-row right"><span class="bubble-left">' + data.body + '</span><span class="timestamp-right">' + moment().format('hh:mm a') + '</span></div>');
                     scrollBottom();
                 });
 
