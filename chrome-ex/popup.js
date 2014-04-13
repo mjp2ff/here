@@ -4,6 +4,7 @@ var socket = io.connect("http://glocale.herokuapp.com");
 
 var div_main, div_messages, div_header, input_msg, div_nick;
 function init() {
+
     $.get(chrome.extension.getURL("popup.html"), function (data){
         $("body").append(data);
         div_main = $("div#glocale_main");
@@ -15,9 +16,11 @@ function init() {
             input_msg.focus();
         });
 
-//        inputSelection = document.createRange();
-//        inputSelection.setStart(input_msg, 0);
-//        inputSelection.setEnd(input_msg, 0);
+        chrome.storage.sync.get({
+            nickname: "guest" + Math.floor(1 + Math.random() * 42)
+        }, function (items) {
+            div_nick.text(items.nickname);
+        });
 
         input_msg.bind("keyup", updateSelection);
         input_msg.bind("mouseup", updateSelection);
@@ -39,6 +42,11 @@ function init() {
                 div_messages.append("<div>" + div_nick.text() + ": " + input_msg.html() + "</div>");
                 input_msg.html("");
             }
+        });
+        div_nick.bind("blur", function (e) {
+            chrome.storage.sync.set({
+                nickname: div_nick.text()
+            });
         });
 
         socket.emit("subscribe", {
