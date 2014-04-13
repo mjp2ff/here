@@ -16,17 +16,6 @@ This is our project for hack.UVA 2014! We're turning every website you visit int
 
 See package.json for a list of requirements/dependencies.
 
-## TODO
-
-* Fix style/colors/prettiness, including display of room title, username, time, etc.
-* General improvements on functionality as necessary.
-
-## Potential new features
-
-* Chat for main page of website or sub-pages, depending on crowdedness.
-* Set usernames.
-* Option to show other users where you go if you leave the page (and thus leave the chat).
-
 ## Authors
 
 * Matt Pearson-Beck
