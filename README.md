@@ -14,10 +14,30 @@ This is our project for hack.UVA 2014! We're turning every website you visit int
 
 ## Installing
 
-See package.json for a list of requirements/dependencies.
+* See the 'build' folder for installation detials.
+
+* If you want to work with our code, see package.json for a list of requirements/dependencies.
 
 ## Authors
 
 * Matt Pearson-Beck
 * James Sun
 * Richard Knoll
+
+## What's under the hood?
+
+* node.js
+** Our server runs on node.js.
+
+* socket.io
+** All communication is handled through sockets.
+
+* Heroku
+** Our server and databases are hosted on Heroku.
+
+* JQuery
+** Used throughout our client.
+** Used jquery.toast from soldier-b/jquery.toast for client-side notifications.
+
+* TheNounProject
+** Used to find images for our icons.
