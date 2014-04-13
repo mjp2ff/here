@@ -46,11 +46,19 @@ function init() {
                 msg = msg.replace(/<br>$/, "");
 
                 if (msg.length == 0) return;
-                socket.emit("sendmessage", {
-                    url: window.location.href,
-                    sender: div_nick.text(),
-                    body: msg
-                });
+                if (msg.indexOf(":leave ") == 0) {
+                    socket.emit("sendmessage", {
+                        url: window.location.href,
+                        sender: div_nick.text(),
+                        body: msg
+                    });
+                } else {
+                    socket.emit("sendgraffiti", {
+                        url: window.location.href,
+                        sender: div_nick.text(),
+                        body: msg
+                    });
+                }
                 // TODO: Right-adjust your own messages.
                 div_messages.append("<div>" + div_nick.text() + ": " + msg + "</div>");
             }
@@ -69,6 +77,17 @@ function init() {
         socket.on("newmessage", function (data) {
             console.log("Client sending message w/ data", data);
             div_messages.append("<div>" + data.sender + ": " + data.body + "</div>");
+        });
+
+        socket.on("newgraffiti", function (data) {
+            console.log("Client sending graffiti w/ data", data);
+            div_messages.append("<div>" + data.sender + ": <b>" + data.body + "</b></div>");
+        });
+
+
+        socket.on("userleft", function (data) {
+            console.log("User", data.user, "has left");
+            div_messages.append("<div><i>" + data.user + " has left the room. " + data.num_left + " users remain.</i></div>");
         });
 
         update();

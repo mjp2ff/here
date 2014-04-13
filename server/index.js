@@ -53,27 +53,35 @@ pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 
             console.log("Server received message:", data, "from client");
 
+            client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, data.body], function(err, result) {
+                if(err) {
+                    return console.error('error inserting graffiti into database', err);
+                }
+                console.log('Successfully inserted new graffiti!');
+            });
 
-            console.log("test1");
-            var isGraffiti = (data.body.indexOf(":leave ") == 0);
-            if (isGraffiti) {
-                data.body = data.body.replace(/^:leave/, "");
-                client.query("INSERT INTO graffiti(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, data.body], function(err, result) {
-                    if(err) {
-                        return console.error('error inserting graffiti into database', err);
-                    }
-                    console.log('Successfully inserted new graffiti!');
-                });
-            } else {
-                client.query("INSERT INTO message(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, data.body], function(err, result) {
-                    if(err) {
-                        return console.error('error inserting message into database', err);
-                    }
-                    console.log('Successfully inserted new message!');
-                });
-            }
             socket.broadcast.to(chatURL).emit('newmessage', data);
             console.log("Now broadcasting message:", data, "to URL group:", chatURL);
+            deleteOldMessages(client, chatURL, data.sender);
+
+            socket.emit('numusers', io.sockets.clients(chatURL).length);
+        });
+
+        socket.on('sendgraffiti', function(data) {
+            var chatURL = data.url.split('/')[2];
+
+            console.log("Server received graffiti:", data, "from client");
+
+            data.body = data.body.replace(/^:leave/, "");
+            client.query("INSERT INTO graffiti(sender, url, body) VALUES ($1, $2, $3)", [data.sender, chatURL, data.body], function(err, result) {
+                if(err) {
+                    return console.error('error inserting graffiti into database', err);
+                }
+                console.log('Successfully inserted new graffiti!');
+            });
+
+            socket.broadcast.to(chatURL).emit('newgraffiti', data);
+            console.log("Now broadcasting graffiti:", data, "to URL group:", chatURL);
             deleteOldMessages(client, chatURL, data.sender);
 
             socket.emit('numusers', io.sockets.clients(chatURL).length);
