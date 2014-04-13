@@ -10,6 +10,7 @@ $(window).unload(function (){
 });
 
 var div_main, div_messages, div_header, div_url, input_msg, div_nick, div_msg_container, div_container;
+var num_users = 1;
 
 chrome.browserAction.onClicked.addListener(function callback() {
     if (false) {
@@ -87,7 +88,6 @@ function init() {
                         body: msg
                     });
                 }
-                // TODO: Right-adjust your own messages.
                 div_messages.append("<div>" + div_nick.text() + ": " + msg + "</div>");
             }
         });
@@ -120,10 +120,16 @@ function init() {
             div_messages.append("<div>" + data.sender + ": <b>" + data.body + "</b></div>");
         });
 
+        socket.on("userjoined", function (data) {
+            console.log("User", data.user, "has joined");
+            num_users = data.num_users;
+            div_messages.append("<div><i>" + data.user + " has entered. " + num_users + " users are present.</i></div>");
+        });
 
         socket.on("userleft", function (data) {
             console.log("User", data.user, "has left");
-            div_messages.append("<div><i>" + data.user + " has left the room. " + data.num_left + " users remain.</i></div>");
+            num_users = data.num_users;
+            div_messages.append("<div><i>" + data.user + " has left the room. " + num_users + " users remain.</i></div>");
         });
 
         update();
@@ -132,8 +138,9 @@ function init() {
 
 function update(){
     div_url.text(window.location.href.split('/')[2]);
-
+    $("#glocale_online").text(num_users + (num_users > 1 ? "users online" : "user online"));
 }
+
 var inputSelection;
 function updateSelection() {
 //    console.log(input_msg.is(":focus"));
